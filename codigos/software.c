@@ -110,6 +110,7 @@ scanf("%d", &opcao);
 
 switch (opcao) {
 case 1: cadastrarPassageiro(); break; // Opção para cadastrar um passageiro
+case 2: listarPassageiros(); break; // opção para listar passageiro
 case 0: printf("Saindo do sistema...\n"); break; // Sair do sistema
 default: printf("Opcao invalida. Tente novamente.\n"); // Opção inválida
 }
@@ -180,3 +181,70 @@ p.pontos = 0; // Inicializa os pontos de fidelidade como zero
 passageiros[numPassageiros++] = p; // Adiciona o passageiro ao array
 printf("Passageiro cadastrado com sucesso! Codigo: %d\n", p.codigo);
 }
+// Função para listar todos os passageiros cadastrados
+void listarPassageiros() {
+// Verifica se existem passageiros cadastrados
+if (numPassageiros == 0) {
+printf("Nenhum passageiro cadastrado.\n");
+return;
+}
+
+
+// Exibe o cabeçalho da lista de passageiros
+printf("\n===== Lista de Passageiros =====\n");
+
+// Percorre o array de passageiros e exibe os detalhes de cada um
+for (int i = 0; i < numPassageiros; i++) {
+Passageiro p = passageiros[i];
+printf("Codigo: %d, Nome: %s, Fidelidade: %s, Pontos: %d\n",
+p.codigo,                  // Exibe o código do passageiro
+p.nome,                    // Exibe o nome do passageiro
+p.fidelidade ? "Sim" : "Nao", // Indica se participa do programa de fidelidade
+p.pontos);                 // Exibe os pontos acumulados
+}
+}
+
+// Função para alterar os dados de um passageiro existente
+void alterarPassageiro() {
+int codigo; // Variável para armazenar o código do passageiro a ser alterado
+
+// Solicita o código do passageiro ao usuário
+printf("Informe o código do passageiro para alterar: ");
+scanf("%d", &codigo);
+
+// Percorre o array de passageiros em busca do código informado
+for (int i = 0; i < numPassageiros; i++) {
+if (passageiros[i].codigo == codigo) { // Verifica se o código coincide
+
+// Solicita o novo nome do passageiro
+printf("Novo nome: ");
+getchar(); // Limpa o buffer do teclado
+fgets(passageiros[i].nome, 50, stdin);
+passageiros[i].nome[strcspn(passageiros[i].nome, "\n")] = 0; // Remove o caractere de nova linha
+
+// Solicita o novo endereço do passageiro
+printf("Novo endereço: ");
+fgets(passageiros[i].endereco, 100, stdin);
+passageiros[i].endereco[strcspn(passageiros[i].endereco, "\n")] = 0;
+
+// Solicita o novo telefone do passageiro
+printf("Novo telefone: ");
+fgets(passageiros[i].telefone, 15, stdin);
+passageiros[i].telefone[strcspn(passageiros[i].telefone, "\n")] = 0;
+
+// Solicita a nova participação no programa de fidelidade
+printf("Fidelidade (1 para Sim, 0 para Não): ");
+scanf("%d", &passageiros[i].fidelidade);
+
+// Informa ao usuário que os dados foram alterados com sucesso
+printf("Passageiro alterado com sucesso!\n");
+return; // Sai da função após encontrar e alterar o passageiro
+}
+}
+
+// Informa ao usuário caso o código do passageiro não seja encontrado
+printf("Passageiro não encontrado.\n");
+}
+
+
+//
