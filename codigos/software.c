@@ -124,6 +124,11 @@ case 9: cadastrarVoo(); break;
 case 10: listarVoos(); break;
 case 11: alterarVoo(); break;
 case 12: excluirVoo(); break;
+case 13: cadastrarAssento(); break;
+case 14: listarAssentos(); break;
+case 15: alterarAssento(); break;
+case 16: excluirAssento(); break;
+
 case 0: printf("Saindo do sistema...\n"); break; // Sair do sistema
 default: printf("Opcao invalida. Tente novamente.\n"); // Opção inválida
 }
@@ -754,8 +759,6 @@ return;
 printf("Voo nao encontrado.\n");
 }
 
-// Funções de cadastro, listagem, alteração e exclusão de assentos
-
 // Função para cadastrar um novo assento
 void cadastrarAssento() {
 if (numAssentos >= MAX_ASSENTOS) { // Verifica se o limite de assentos foi atingido
@@ -797,4 +800,171 @@ a.status = 0; // Define o assento como livre por padrão
 // Adiciona o assento ao array
 assentos[numAssentos++] = a;
 printf("Assento cadastrado com sucesso! Numero: %d\n", a.numeroAssento);
+}
+
+
+// Funções de cadastro, listagem, alteração e exclusão de assentos
+
+// Função para cadastrar um novo assento
+void CadastrarAssento() {
+// Verifica se o limite de assentos foi atingido
+if (numAssentos >= MAX_ASSENTOS) {
+printf("Limite de assentos atingido!\n");
+return;
+}
+
+Assento a;
+
+// Solicita o número do assento ao usuário
+printf("Número do Assento: ");
+if (scanf("%d", &a.numeroAssento) != 1 || a.numeroAssento <= 0) {
+printf("Erro: Número do assento inválido.\n");
+while (getchar() != "\n"); // Limpa o buffer de entrada
+return;
+}
+
+// Verifica se o número do assento já está em uso
+for (int i = 0; i < numAssentos; i++) {
+if (assentos[i].numeroAssento == a.numeroAssento) {
+printf("Erro: O número do assento já está em uso.\n");
+return;
+}
+}
+
+// Solicita o código do voo ao qual o assento pertence
+printf("Código do Voo: ");
+if (scanf("%d", &a.codigoVoo) != 1 || a.codigoVoo <= 0) {
+printf("Erro: Código do voo inválido.\n");
+while (getchar() != "\n"); // Limpa o buffer de entrada
+return;
+}
+
+// Verifica se o código do voo existe no sistema
+int vooEncontrado = 0;
+for (int i = 0; i < numVoos; i++) {
+if (voos[i].codigo == a.codigoVoo) {
+vooEncontrado = 1;
+break;
+}
+}
+if (!vooEncontrado) {
+printf("Erro: Código do voo não encontrado.\n");
+return;
+}
+
+// Define o status do assento como livre por padrão
+a.status = 0;
+
+// Adiciona o assento ao array global
+assentos[numAssentos++] = a;
+printf("Assento cadastrado com sucesso! Número: %d\n", a.numeroAssento);
+}
+
+// Função para listar todos os assentos cadastrados
+void listarAssentos() {
+// Verifica se há assentos cadastrados
+if (numAssentos == 0) {
+printf("Nenhum assento cadastrado.\n");
+return;
+}
+
+// Exibe a lista de assentos
+printf("\n===== Lista de Assentos =====\n");
+for (int i = 0; i < numAssentos; i++) {
+Assento a = assentos[i];
+printf("Número: %d, Código do Voo: %d, Status: %s\n",
+   a.numeroAssento, a.codigoVoo, a.status ? "Ocupado" : "Livre");
+}
+}
+
+// Função para alterar os dados de um assento existente
+void alterarAssento() {
+int numeroAssento, codigoVoo;
+
+// Solicita o número do assento e o código do voo ao qual pertence
+printf("Informe o número do assento: ");
+if (scanf("%d", &numeroAssento) != 1 || numeroAssento <= 0) {
+printf("Erro: Número do assento inválido.\n");
+while (getchar() != "\n"); // Limpa o buffer de entrada
+return;
+}
+
+printf("Informe o código do voo: ");
+if (scanf("%d", &codigoVoo) != 1 || codigoVoo <= 0) {
+printf("Erro: Código do voo inválido.\n");
+while (getchar() != "\n"); // Limpa o buffer de entrada
+return;
+}
+
+// Procura o assento no array global
+for (int i = 0; i < numAssentos; i++) {
+if (assentos[i].numeroAssento == numeroAssento && assentos[i].codigoVoo == codigoVoo) {
+// Solicita novos valores para o assento
+printf("Novo número do assento: ");
+if (scanf("%d", &assentos[i].numeroAssento) != 1 || assentos[i].numeroAssento <= 0) {
+    printf("Erro: Número do assento inválido.\n");
+    while (getchar() != "\n"); // Limpa o buffer de entrada
+    return;
+}
+
+printf("Novo código do voo: ");
+if (scanf("%d", &assentos[i].codigoVoo) != 1 || assentos[i].codigoVoo <= 0) {
+    printf("Erro: Código do voo inválido.\n");
+    while (getchar() != "\n"); // Limpa o buffer de entrada
+    return;
+}
+
+printf("Novo status (1 para ocupado, 0 para livre): ");
+if (scanf("%d", &assentos[i].status) != 1 || (assentos[i].status != 0 && assentos[i].status != 1)) {
+    printf("Erro: Status inválido.\n");
+    while (getchar() != "\n"); // Limpa o buffer de entrada
+    return;
+}
+
+printf("Assento alterado com sucesso!\n");
+return;
+}
+}
+
+// Caso o assento não seja encontrado
+printf("Assento não encontrado.\n");
+}
+
+// Função para excluir um assento do sistema
+void excluirAssento() {
+int numeroAssento, codigoVoo;
+
+// Solicita o número do assento e o código do voo ao qual pertence
+printf("Informe o número do assento: ");
+if (scanf("%d", &numeroAssento) != 1 || numeroAssento <= 0) {
+printf("Erro: Número do assento inválido.\n");
+while (getchar() != "\n"); // Limpa o buffer de entrada
+return;
+}
+
+printf("Informe o código do voo: ");
+if (scanf("%d", &codigoVoo) != 1 || codigoVoo <= 0) {
+printf("Erro: Código do voo inválido.\n");
+while (getchar() != "\n"); // Limpa o buffer de entrada
+return;
+}
+
+// Procura o assento no array global
+for (int i = 0; i < numAssentos; i++) {
+if (assentos[i].numeroAssento == numeroAssento && assentos[i].codigoVoo == codigoVoo) {
+// Remove o assento deslocando os elementos subsequentes
+for (int j = i; j < numAssentos - 1; j++) {
+    assentos[j] = assentos[j + 1];
+}
+
+// Decrementa o contador de assentos
+numAssentos--;
+
+printf("Assento excluído com sucesso!\n");
+return;
+}
+}
+
+// Caso o assento não seja encontrado
+printf("Assento não encontrado.\n");
 }
