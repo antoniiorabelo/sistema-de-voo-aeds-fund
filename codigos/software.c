@@ -113,6 +113,10 @@ case 1: cadastrarPassageiro(); break; // Opção para cadastrar um passageiro
 case 2: listarPassageiros(); break; // opção para listar passageiro
 case 3: alterarPassageiro(); break; //opção para alterar
 case 4: excluirPassageiro(); break; //opção para excluir
+case 5: cadastrarTripulante(); break;
+case 6: listarTripulantes(); break;
+case 7: alterarTripulante(); break;
+case 8: excluirTripulante(); break;
 case 0: printf("Saindo do sistema...\n"); break; // Sair do sistema
 default: printf("Opcao invalida. Tente novamente.\n"); // Opção inválida
 }
@@ -262,7 +266,7 @@ if (passageiros[i].codigo == codigo) { // Verifica se o código coincide
 
 // Desloca todos os passageiros subsequentes uma posição para trás
 for (int j = i; j < numPassageiros - 1; j++) {
-    passageiros[j] = passageiros[j + 1];
+passageiros[j] = passageiros[j + 1];
 }
 
 // Decrementa o contador global de passageiros
@@ -276,4 +280,167 @@ return; // Sai da função após a exclusão
 
 // Caso o código não seja encontrado, informa ao usuário
 printf("Passageiro não encontrado.\n");
+}
+// Funções de cadastro, listagem, alteração e exclusão de tripulantes
+
+// Função para cadastrar um novo tripulante
+void cadastrarTripulante() {
+if (numTripulantes >= MAX_TRIPULANTES) { // Verifica se o limite de tripulantes foi atingido
+printf("Limite de tripulantes atingido!\n");
+return;
+}
+
+Tripulante t;
+t.codigo = numTripulantes + 1; // Define um código único para o tripulante
+
+// Solicita e valida o nome do tripulante
+do {
+printf("Nome (somente letras): ");
+getchar(); // Limpa o buffer do teclado
+fgets(t.nome, sizeof(t.nome), stdin);
+t.nome[strcspn(t.nome, "\n")] = 0; // Remove o caractere de nova linha
+
+int valido = 1;
+for (int i = 0; t.nome[i] != '\0'; i++) {
+if (!isalpha(t.nome[i]) && t.nome[i] != ' ') {
+valido = 0;
+break;
+}
+}
+
+if (!valido) {
+printf("Erro: O nome deve conter apenas letras.\n");
+} else {
+break;
+}
+} while (1);
+
+// Solicita e valida o telefone do tripulante
+do {
+printf("Telefone (somente números): ");
+fgets(t.telefone, sizeof(t.telefone), stdin);
+t.telefone[strcspn(t.telefone, "\n")] = 0; // Remove o caractere de nova linha
+
+int valido = 1;
+for (int i = 0; t.telefone[i] != '\0'; i++) {
+if (!isdigit(t.telefone[i])) {
+valido = 0;
+break;
+}
+}
+
+if (!valido) {
+printf("Erro: O telefone deve conter apenas números.\n");
+} else {
+break;
+}
+} while (1);
+
+// Solicita e valida o cargo do tripulante
+int cargoOpcao;
+do {
+printf("Cargo (1 para Piloto, 2 para Copiloto, 3 para Comissário): ");
+scanf("%d", &cargoOpcao);
+
+switch (cargoOpcao) {
+case 1:
+strcpy(t.cargo, "Piloto");
+break;
+case 2:
+strcpy(t.cargo, "Copiloto");
+break;
+case 3:
+strcpy(t.cargo, "Comissario");
+break;
+default:
+printf("Opção inválida. Escolha 1 para Piloto, 2 para Copiloto ou 3 para Comissário.\n");
+}
+} while (cargoOpcao < 1 || cargoOpcao > 3); // Garante que apenas valores válidos sejam aceitos
+
+tripulantes[numTripulantes++] = t; // Adiciona o tripulante ao array
+printf("Tripulante cadastrado com sucesso! Codigo: %d\n", t.codigo);
+}
+
+
+// Função para listar todos os tripulantes cadastrados
+void listarTripulantes() {
+if (numTripulantes == 0) { // Verifica se há tripulantes cadastrados
+printf("Nenhum tripulante cadastrado.\n");
+return;
+}
+
+// Exibe a lista de tripulantes
+printf("\n===== Lista de Tripulantes =====\n");
+for (int i = 0; i < numTripulantes; i++) {
+Tripulante t = tripulantes[i];
+printf("Codigo: %d, Nome: %s, Cargo: %s\n", t.codigo, t.nome, t.cargo);
+}
+}
+
+// Função para alterar os dados de um tripulante existente
+void alterarTripulante() {
+int codigo; // Variável para armazenar o código do tripulante a ser alterado
+
+// Solicita o código do tripulante ao usuário
+printf("Informe o código do tripulante para alterar: ");
+scanf("%d", &codigo);
+
+// Percorre o array de tripulantes em busca do código informado
+for (int i = 0; i < numTripulantes; i++) {
+if (tripulantes[i].codigo == codigo) { // Verifica se o código coincide
+
+// Solicita o novo nome do tripulante
+printf("Novo nome: ");
+getchar(); // Limpa o buffer do teclado
+fgets(tripulantes[i].nome, sizeof(tripulantes[i].nome), stdin);
+tripulantes[i].nome[strcspn(tripulantes[i].nome, "\n")] = 0; // Remove o caractere de nova linha
+
+// Solicita o novo telefone do tripulante
+printf("Novo telefone: ");
+fgets(tripulantes[i].telefone, sizeof(tripulantes[i].telefone), stdin);
+tripulantes[i].telefone[strcspn(tripulantes[i].telefone, "\n")] = 0;
+
+// Solicita o novo cargo do tripulante
+printf("Novo cargo: ");
+fgets(tripulantes[i].cargo, sizeof(tripulantes[i].cargo), stdin);
+tripulantes[i].cargo[strcspn(tripulantes[i].cargo, "\n")] = 0;
+
+// Informa que os dados foram alterados com sucesso
+printf("Tripulante alterado com sucesso!\n");
+return;
+}
+}
+
+// Caso o código não seja encontrado
+printf("Tripulante não encontrado.\n");
+}
+
+// Função para excluir um tripulante do sistema
+void excluirTripulante() {
+int codigo; // Variável para armazenar o código do tripulante a ser excluído
+
+// Solicita o código do tripulante ao usuário
+printf("Informe o código do tripulante para excluir: ");
+scanf("%d", &codigo);
+
+// Percorre o array de tripulantes em busca do código informado
+for (int i = 0; i < numTripulantes; i++) {
+if (tripulantes[i].codigo == codigo) { // Verifica se o código coincide
+
+// Desloca todos os tripulantes subsequentes uma posição para trás
+for (int j = i; j < numTripulantes - 1; j++) {
+tripulantes[j] = tripulantes[j + 1];
+}
+
+// Decrementa o contador global de tripulantes
+numTripulantes--;
+
+// Informa que o tripulante foi excluído com sucesso
+printf("Tripulante excluído com sucesso!\n");
+return;
+}
+}
+
+// Caso o código não seja encontrado
+printf("Tripulante não encontrado.\n");
 }
