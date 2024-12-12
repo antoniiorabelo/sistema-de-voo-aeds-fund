@@ -12,5 +12,6 @@ Diante dessa situação, foi decidido implementar um sistema em linguagem C para
 - **stdio.h**: Biblioteca padrão que fornece funções como printf e scanf, fundamentais para interação entre entrada e saída de dados.
 - **stdlib.h**: Oferece funções para manipulação de memória, conversão de tipos, geração de números aleatórios e controle do ambiente de execução do software.
 - **string.h**: Utilizado para manipulação de strings, exemplo cópia, concatenação, etc.
-- **unity.h**: Usada para manipular os casos de teste, auxilia na confirmação de testes.
+- **ctype.h**: Usada para manipulação e classificação de caracteres.
+- **unity.h**: Ultilizada para manipular os casos de teste, auxilia na confirmação de testes.
 
