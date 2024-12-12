@@ -1,6 +1,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <ctype.h>
+#include <time.h>
+
 
 // Definição de constantes para os limites do sistema
 #define MAX_PASSAGEIROS 100 // Máximo de passageiros permitidos
@@ -117,11 +120,17 @@ case 5: cadastrarTripulante(); break;
 case 6: listarTripulantes(); break;
 case 7: alterarTripulante(); break;
 case 8: excluirTripulante(); break;
+case 9: cadastrarVoo(); break;
+case 10: listarVoos(); break;
+case 11: alterarVoo(); break;
+case 12: excluirVoo(); break;
 case 0: printf("Saindo do sistema...\n"); break; // Sair do sistema
 default: printf("Opcao invalida. Tente novamente.\n"); // Opção inválida
 }
 } while (opcao != 0);
 }
+
+// Funções de cadastro
 
 // Valida se uma string contém apenas letras e espaços
 int validarNome(const char *nome) {
@@ -187,6 +196,8 @@ p.pontos = 0; // Inicializa os pontos de fidelidade como zero
 passageiros[numPassageiros++] = p; // Adiciona o passageiro ao array
 printf("Passageiro cadastrado com sucesso! Codigo: %d\n", p.codigo);
 }
+
+
 // Função para listar todos os passageiros cadastrados
 void listarPassageiros() {
 // Verifica se existem passageiros cadastrados
@@ -194,7 +205,6 @@ if (numPassageiros == 0) {
 printf("Nenhum passageiro cadastrado.\n");
 return;
 }
-
 
 // Exibe o cabeçalho da lista de passageiros
 printf("\n===== Lista de Passageiros =====\n");
@@ -212,6 +222,52 @@ p.pontos);                 // Exibe os pontos acumulados
 
 // Função para alterar os dados de um passageiro existente
 void alterarPassageiro() {
+int codigo; // Variável para armazenar o código do passageiro a ser alterado
+
+// Solicita o código do passageiro ao usuário
+printf("Informe o código do passageiro para alterar: ");
+scanf("%d", &codigo);
+
+// Percorre o array de passageiros em busca do código informado
+for (int i = 0; i < numPassageiros; i++) {
+if (passageiros[i].codigo == codigo) { // Verifica se o código coincide
+
+// Solicita o novo nome do passageiro
+printf("Novo nome: ");
+getchar(); // Limpa o buffer de entrada
+if (fgets(passageiros[i].nome, sizeof(passageiros[i].nome), stdin) != NULL) {
+passageiros[i].nome[strcspn(passageiros[i].nome, "\n")] = 0; // Remove o caractere de nova linha
+}
+
+// Solicita o novo endereço do passageiro
+printf("Novo endereço: ");
+if (fgets(passageiros[i].endereco, sizeof(passageiros[i].endereco), stdin) != NULL) {
+passageiros[i].endereco[strcspn(passageiros[i].endereco, "\n")] = 0;
+}
+
+// Solicita o novo telefone do passageiro
+printf("Novo telefone: ");
+if (fgets(passageiros[i].telefone, sizeof(passageiros[i].telefone), stdin) != NULL) {
+passageiros[i].telefone[strcspn(passageiros[i].telefone, "\n")] = 0;
+}
+
+// Solicita a nova participação no programa de fidelidade
+printf("Fidelidade (1 para Sim, 0 para Não): ");
+scanf("%d", &passageiros[i].fidelidade);
+
+// Informa ao usuário que os dados foram alterados com sucesso
+printf("Passageiro alterado com sucesso!\n");
+return; // Sai da função após encontrar e alterar o passageiro
+}
+}
+
+// Informa ao usuário caso o código do passageiro não seja encontrado
+printf("Passageiro não encontrado.\n");
+}
+
+
+// Função para alterar os dados de um passageiro existente
+void AlterarPassageiro() {
 int codigo; // Variável para armazenar o código do passageiro a ser alterado
 
 // Solicita o código do passageiro ao usuário
@@ -281,6 +337,7 @@ return; // Sai da função após a exclusão
 // Caso o código não seja encontrado, informa ao usuário
 printf("Passageiro não encontrado.\n");
 }
+
 // Funções de cadastro, listagem, alteração e exclusão de tripulantes
 
 // Função para cadastrar um novo tripulante
@@ -443,4 +500,301 @@ return;
 
 // Caso o código não seja encontrado
 printf("Tripulante não encontrado.\n");
+}
+
+// Funções de cadastro, listagem, alteração e exclusão de voos
+
+// Função para validar uma data no formato dd/mm/aaaa
+int validarData(const char *data) {
+if (strlen(data) != 10) return 0; // Verifica se o tamanho é correto
+
+int dia, mes, ano;
+if (sscanf(data, "%d/%d/%d", &dia, &mes, &ano) != 3) return 0; // Converte e valida o formato
+
+if (ano < 1900 || ano > 2100 || mes < 1 || mes > 12 || dia < 1) return 0; // Valida intervalos
+
+int diasNoMes[] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
+
+// Verifica anos bissextos
+if ((ano % 4 == 0 && ano % 100 != 0) || (ano % 400 == 0)) {
+diasNoMes[1] = 29;
+}
+
+return dia <= diasNoMes[mes - 1];
+}
+
+// Função para validar se uma string contém apenas letras
+int validarLetras(const char *str) {
+for (int i = 0; str[i] != '\0'; i++) {
+if (!isalpha(str[i]) && str[i] != ' ') {
+    return 0;
+}
+}
+return 1;
+}
+
+// Função para verificar se um código existe em um array
+int verificarCodigo(int codigo, int tipo) {
+switch (tipo) {
+case 1: // Aviões
+    for (int i = 0; i < MAX_VOOS; i++) {
+        if (voos[i].codigoAviao == codigo) return 1;
+    }
+    break;
+case 2: // Pilotos
+    for (int i = 0; i < numTripulantes; i++) {
+        if (strcmp(tripulantes[i].cargo, "Piloto") == 0 && tripulantes[i].codigo == codigo) return 1;
+    }
+    break;
+case 3: // Copilotos
+    for (int i = 0; i < numTripulantes; i++) {
+        if (strcmp(tripulantes[i].cargo, "Copiloto") == 0 && tripulantes[i].codigo == codigo) return 1;
+    }
+    break;
+}
+return 0;
+}
+
+// Função para cadastrar um novo voo
+void cadastrarVoo() {
+if (numVoos >= MAX_VOOS) { // Verifica se o limite de voos foi atingido
+printf("Limite de voos atingido!\n");
+return;
+}
+
+Voo v;
+v.codigo = numVoos + 1; // Gera um código único para o voo
+
+// Solicita e valida a data
+do {
+printf("Data (dd/mm/aaaa): ");
+getchar(); // Limpa o buffer do teclado
+fgets(v.data, sizeof(v.data), stdin);
+v.data[strcspn(v.data, "\n")] = 0; // Remove o caractere de nova linha
+
+if (!validarData(v.data)) {
+    printf("Erro: Data inválida. Tente novamente.\n");
+} else {
+    break;
+}
+} while (1);
+
+// Solicita e valida a origem
+do {
+printf("Origem: ");
+fgets(v.origem, sizeof(v.origem), stdin);
+v.origem[strcspn(v.origem, "\n")] = 0; // Remove o caractere de nova linha
+
+if (!validarLetras(v.origem)) {
+    printf("Erro: Origem deve conter apenas letras.\n");
+} else {
+    break;
+}
+} while (1);
+
+// Solicita e valida o destino
+do {
+printf("Destino: ");
+fgets(v.destino, sizeof(v.destino), stdin);
+v.destino[strcspn(v.destino, "\n")] = 0; // Remove o caractere de nova linha
+
+if (!validarLetras(v.destino)) {
+    printf("Erro: Destino deve conter apenas letras.\n");
+} else {
+    break;
+}
+} while (1);
+
+// Solicita e valida o código do avião
+do {
+printf("Codigo do Aviao: ");
+scanf("%d", &v.codigoAviao);
+
+if (!verificarCodigo(v.codigoAviao, 1)) {
+    printf("Erro: Codigo do avião não encontrado.\n");
+} else {
+    break;
+}
+} while (1);
+
+// Solicita e valida o código do piloto
+do {
+printf("Codigo do Piloto: ");
+scanf("%d", &v.codigoPiloto);
+
+if (!verificarCodigo(v.codigoPiloto, 2)) {
+    printf("Erro: Codigo do piloto não encontrado.\n");
+} else {
+    break;
+}
+} while (1);
+
+// Solicita e valida o código do copiloto
+do {
+printf("Codigo do Copiloto: ");
+scanf("%d", &v.codigoCopiloto);
+
+if (!verificarCodigo(v.codigoCopiloto, 3)) {
+    printf("Erro: Codigo do copiloto não encontrado.\n");
+} else {
+    break;
+}
+} while (1);
+
+// Solicita a tarifa
+printf("Tarifa: ");
+scanf("%f", &v.tarifa);
+
+// Define o status do voo
+v.status = 1; // Ativo
+printf("Voo ativado com sucesso!\n");
+
+// Adiciona o voo ao array
+voos[numVoos++] = v;
+printf("Voo cadastrado com sucesso! Codigo: %d\n", v.codigo);
+}
+
+
+// Função para listar todos os voos cadastrados
+void listarVoos() {
+if (numVoos == 0) { // Verifica se há voos cadastrados
+printf("Nenhum voo cadastrado.\n");
+return;
+}
+
+// Exibe a lista de voos
+printf("\n===== Lista de Voos =====\n");
+for (int i = 0; i < numVoos; i++) {
+Voo v = voos[i];
+printf("Codigo: %d, Data: %s, Hora: %s, Origem: %s, Destino: %s, Status: %s, Tarifa: %.2f\n",
+v.codigo, v.data, v.hora, v.origem, v.destino,
+v.status ? "Ativo" : "Inativo", v.tarifa);
+}
+}
+
+// Função para alterar os dados de um voo existente
+void alterarVoo() {
+int codigo; // Variável para armazenar o código do voo a ser alterado
+
+// Solicita o código do voo ao usuário
+printf("Informe o código do voo para alterar: ");
+scanf("%d", &codigo);
+
+// Percorre o array de voos em busca do código informado
+for (int i = 0; i < numVoos; i++) {
+if (voos[i].codigo == codigo) { // Verifica se o código coincide
+
+// Solicita os novos dados do voo
+printf("Nova data (dd/mm/aaaa): ");
+getchar(); // Limpa o buffer do teclado
+fgets(voos[i].data, 11, stdin);
+voos[i].data[strcspn(voos[i].data, "\n")] = 0;
+
+printf("Nova hora (hh:mm): ");
+fgets(voos[i].hora, 6, stdin);
+voos[i].hora[strcspn(voos[i].hora, "\n")] = 0;
+
+printf("Nova origem: ");
+fgets(voos[i].origem, 50, stdin);
+voos[i].origem[strcspn(voos[i].origem, "\n")] = 0;
+
+printf("Novo destino: ");
+fgets(voos[i].destino, 50, stdin);
+voos[i].destino[strcspn(voos[i].destino, "\n")] = 0;
+
+printf("Novo código do avião: ");
+scanf("%d", &voos[i].codigoAviao);
+
+printf("Novo código do piloto: ");
+scanf("%d", &voos[i].codigoPiloto);
+
+printf("Novo código do copiloto: ");
+scanf("%d", &voos[i].codigoCopiloto);
+
+printf("Nova tarifa: ");
+scanf("%f", &voos[i].tarifa);
+
+// Informa que o voo foi alterado com sucesso
+printf("Voo alterado com sucesso!\n");
+return;
+}
+}
+
+// Caso o código não seja encontrado
+printf("Voo nao encontrado.\n");
+}
+
+// Função para excluir um voo do sistema
+void excluirVoo() {
+int codigo; // Variável para armazenar o código do voo a ser excluído
+
+// Solicita o código do voo ao usuário
+printf("Informe o código do voo para excluir: ");
+scanf("%d", &codigo);
+
+// Percorre o array de voos em busca do código informado
+for (int i = 0; i < numVoos; i++) {
+if (voos[i].codigo == codigo) { // Verifica se o código coincide
+
+// Desloca todos os voos subsequentes uma posição para trás
+for (int j = i; j < numVoos - 1; j++) {
+voos[j] = voos[j + 1];
+}
+
+// Decrementa o contador global de voos
+numVoos--;
+
+// Informa que o voo foi excluído com sucesso
+printf("Voo excluido com sucesso!\n");
+return;
+}
+}
+
+// Caso o código não seja encontrado
+printf("Voo nao encontrado.\n");
+}
+
+// Funções de cadastro, listagem, alteração e exclusão de assentos
+
+// Função para cadastrar um novo assento
+void cadastrarAssento() {
+if (numAssentos >= MAX_ASSENTOS) { // Verifica se o limite de assentos foi atingido
+printf("Limite de assentos atingido!\n");
+return;
+}
+
+Assento a;
+printf("Numero do Assento: ");
+scanf("%d", &a.numeroAssento);
+
+// Verifica se o número do assento já está em uso
+for (int i = 0; i < numAssentos; i++) {
+if (assentos[i].numeroAssento == a.numeroAssento) {
+printf("Erro: O numero do assento ja esta em uso.\n");
+return;
+}
+}
+
+printf("Codigo do Voo: ");
+scanf("%d", &a.codigoVoo);
+
+// Verifica se o voo existe
+int vooEncontrado = 0;
+for (int i = 0; i < numVoos; i++) {
+if (voos[i].codigo == a.codigoVoo) {
+vooEncontrado = 1;
+break;
+}
+}
+
+if (!vooEncontrado) {
+printf("Erro: Codigo do voo nao encontrado.\n");
+return;
+}
+
+a.status = 0; // Define o assento como livre por padrão
+
+// Adiciona o assento ao array
+assentos[numAssentos++] = a;
+printf("Assento cadastrado com sucesso! Numero: %d\n", a.numeroAssento);
 }
