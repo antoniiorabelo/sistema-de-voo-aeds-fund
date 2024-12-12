@@ -111,6 +111,8 @@ scanf("%d", &opcao);
 switch (opcao) {
 case 1: cadastrarPassageiro(); break; // Opção para cadastrar um passageiro
 case 2: listarPassageiros(); break; // opção para listar passageiro
+case 3: alterarPassageiro(); break; //opção para alterar
+case 4: excluirPassageiro(); break; //opção para excluir
 case 0: printf("Saindo do sistema...\n"); break; // Sair do sistema
 default: printf("Opcao invalida. Tente novamente.\n"); // Opção inválida
 }
@@ -246,5 +248,32 @@ return; // Sai da função após encontrar e alterar o passageiro
 printf("Passageiro não encontrado.\n");
 }
 
+// Função para excluir um passageiro do sistema
+void excluirPassageiro() {
+int codigo; // Variável para armazenar o código do passageiro a ser excluído
 
-//
+// Solicita ao usuário o código do passageiro
+printf("Informe o código do passageiro para excluir: ");
+scanf("%d", &codigo);
+
+// Percorre o array de passageiros em busca do código informado
+for (int i = 0; i < numPassageiros; i++) {
+if (passageiros[i].codigo == codigo) { // Verifica se o código coincide
+
+// Desloca todos os passageiros subsequentes uma posição para trás
+for (int j = i; j < numPassageiros - 1; j++) {
+    passageiros[j] = passageiros[j + 1];
+}
+
+// Decrementa o contador global de passageiros
+numPassageiros--;
+
+// Exibe mensagem de sucesso ao usuário
+printf("Passageiro excluído com sucesso!\n");
+return; // Sai da função após a exclusão
+}
+}
+
+// Caso o código não seja encontrado, informa ao usuário
+printf("Passageiro não encontrado.\n");
+}
