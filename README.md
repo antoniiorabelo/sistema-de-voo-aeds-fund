@@ -7,3 +7,4 @@ A LIDER AERO é uma empresa focada em oferecer aos seus clientes uma experiênci
 No entanto, até hoje, a LIDER AERO gerenciava suas operações de voos, reservas, tripulações e assentos utilizando planilhas de Excel e documentos físicos. Esse método tem gerado problemas significativos, como sobreposição de reservas, dificuldades no controle de horários dos voos e erros no gerenciamento das equipes. Essas falhas não só prejudicam a eficiência da empresa, como também comprometem a satisfação dos passageiros.
 
 Diante dessa situação, foi decidido implementar um sistema em linguagem C para modernizar e centralizar as operações da LIDER AERO. Esse sistema terá como objetivo resolver os problemas enfrentados, oferecendo funcionalidades como cadastro e controle de voos, gerenciamento de tripulantes e reservas de assentos, garantindo que a empresa opere com maior organização e precisão.
+# Bibliotecas usadas
