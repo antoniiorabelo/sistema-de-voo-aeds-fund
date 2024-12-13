@@ -128,6 +128,10 @@ case 13: cadastrarAssento(); break;
 case 14: listarAssentos(); break;
 case 15: alterarAssento(); break;
 case 16: excluirAssento(); break;
+case 17: cadastrarReserva(); break;
+case 18: listarReservas(); break;
+case 19: alterarReserva(); break;
+case 20: excluirReserva(); break;
 
 case 0: printf("Saindo do sistema...\n"); break; // Sair do sistema
 default: printf("Opcao invalida. Tente novamente.\n"); // Opção inválida
@@ -532,7 +536,7 @@ return dia <= diasNoMes[mes - 1];
 int validarLetras(const char *str) {
 for (int i = 0; str[i] != '\0'; i++) {
 if (!isalpha(str[i]) && str[i] != ' ') {
-    return 0;
+return 0;
 }
 }
 return 1;
@@ -542,20 +546,20 @@ return 1;
 int verificarCodigo(int codigo, int tipo) {
 switch (tipo) {
 case 1: // Aviões
-    for (int i = 0; i < MAX_VOOS; i++) {
-        if (voos[i].codigoAviao == codigo) return 1;
-    }
-    break;
+for (int i = 0; i < MAX_VOOS; i++) {
+if (voos[i].codigoAviao == codigo) return 1;
+}
+break;
 case 2: // Pilotos
-    for (int i = 0; i < numTripulantes; i++) {
-        if (strcmp(tripulantes[i].cargo, "Piloto") == 0 && tripulantes[i].codigo == codigo) return 1;
-    }
-    break;
+for (int i = 0; i < numTripulantes; i++) {
+if (strcmp(tripulantes[i].cargo, "Piloto") == 0 && tripulantes[i].codigo == codigo) return 1;
+}
+break;
 case 3: // Copilotos
-    for (int i = 0; i < numTripulantes; i++) {
-        if (strcmp(tripulantes[i].cargo, "Copiloto") == 0 && tripulantes[i].codigo == codigo) return 1;
-    }
-    break;
+for (int i = 0; i < numTripulantes; i++) {
+if (strcmp(tripulantes[i].cargo, "Copiloto") == 0 && tripulantes[i].codigo == codigo) return 1;
+}
+break;
 }
 return 0;
 }
@@ -578,9 +582,9 @@ fgets(v.data, sizeof(v.data), stdin);
 v.data[strcspn(v.data, "\n")] = 0; // Remove o caractere de nova linha
 
 if (!validarData(v.data)) {
-    printf("Erro: Data inválida. Tente novamente.\n");
+printf("Erro: Data inválida. Tente novamente.\n");
 } else {
-    break;
+break;
 }
 } while (1);
 
@@ -591,9 +595,9 @@ fgets(v.origem, sizeof(v.origem), stdin);
 v.origem[strcspn(v.origem, "\n")] = 0; // Remove o caractere de nova linha
 
 if (!validarLetras(v.origem)) {
-    printf("Erro: Origem deve conter apenas letras.\n");
+printf("Erro: Origem deve conter apenas letras.\n");
 } else {
-    break;
+break;
 }
 } while (1);
 
@@ -604,9 +608,9 @@ fgets(v.destino, sizeof(v.destino), stdin);
 v.destino[strcspn(v.destino, "\n")] = 0; // Remove o caractere de nova linha
 
 if (!validarLetras(v.destino)) {
-    printf("Erro: Destino deve conter apenas letras.\n");
+printf("Erro: Destino deve conter apenas letras.\n");
 } else {
-    break;
+break;
 }
 } while (1);
 
@@ -616,9 +620,9 @@ printf("Codigo do Aviao: ");
 scanf("%d", &v.codigoAviao);
 
 if (!verificarCodigo(v.codigoAviao, 1)) {
-    printf("Erro: Codigo do avião não encontrado.\n");
+printf("Erro: Codigo do avião não encontrado.\n");
 } else {
-    break;
+break;
 }
 } while (1);
 
@@ -628,9 +632,9 @@ printf("Codigo do Piloto: ");
 scanf("%d", &v.codigoPiloto);
 
 if (!verificarCodigo(v.codigoPiloto, 2)) {
-    printf("Erro: Codigo do piloto não encontrado.\n");
+printf("Erro: Codigo do piloto não encontrado.\n");
 } else {
-    break;
+break;
 }
 } while (1);
 
@@ -640,9 +644,9 @@ printf("Codigo do Copiloto: ");
 scanf("%d", &v.codigoCopiloto);
 
 if (!verificarCodigo(v.codigoCopiloto, 3)) {
-    printf("Erro: Codigo do copiloto não encontrado.\n");
+printf("Erro: Codigo do copiloto não encontrado.\n");
 } else {
-    break;
+break;
 }
 } while (1);
 
@@ -873,7 +877,7 @@ printf("\n===== Lista de Assentos =====\n");
 for (int i = 0; i < numAssentos; i++) {
 Assento a = assentos[i];
 printf("Número: %d, Código do Voo: %d, Status: %s\n",
-   a.numeroAssento, a.codigoVoo, a.status ? "Ocupado" : "Livre");
+a.numeroAssento, a.codigoVoo, a.status ? "Ocupado" : "Livre");
 }
 }
 
@@ -902,23 +906,23 @@ if (assentos[i].numeroAssento == numeroAssento && assentos[i].codigoVoo == codig
 // Solicita novos valores para o assento
 printf("Novo número do assento: ");
 if (scanf("%d", &assentos[i].numeroAssento) != 1 || assentos[i].numeroAssento <= 0) {
-    printf("Erro: Número do assento inválido.\n");
-    while (getchar() != "\n"); // Limpa o buffer de entrada
-    return;
+printf("Erro: Número do assento inválido.\n");
+while (getchar() != "\n"); // Limpa o buffer de entrada
+return;
 }
 
 printf("Novo código do voo: ");
 if (scanf("%d", &assentos[i].codigoVoo) != 1 || assentos[i].codigoVoo <= 0) {
-    printf("Erro: Código do voo inválido.\n");
-    while (getchar() != "\n"); // Limpa o buffer de entrada
-    return;
+printf("Erro: Código do voo inválido.\n");
+while (getchar() != "\n"); // Limpa o buffer de entrada
+return;
 }
 
 printf("Novo status (1 para ocupado, 0 para livre): ");
 if (scanf("%d", &assentos[i].status) != 1 || (assentos[i].status != 0 && assentos[i].status != 1)) {
-    printf("Erro: Status inválido.\n");
-    while (getchar() != "\n"); // Limpa o buffer de entrada
-    return;
+printf("Erro: Status inválido.\n");
+while (getchar() != "\n"); // Limpa o buffer de entrada
+return;
 }
 
 printf("Assento alterado com sucesso!\n");
@@ -954,7 +958,7 @@ for (int i = 0; i < numAssentos; i++) {
 if (assentos[i].numeroAssento == numeroAssento && assentos[i].codigoVoo == codigoVoo) {
 // Remove o assento deslocando os elementos subsequentes
 for (int j = i; j < numAssentos - 1; j++) {
-    assentos[j] = assentos[j + 1];
+assentos[j] = assentos[j + 1];
 }
 
 // Decrementa o contador de assentos
@@ -967,4 +971,213 @@ return;
 
 // Caso o assento não seja encontrado
 printf("Assento não encontrado.\n");
+}
+// Funções de cadastro, listagem, alteração e exclusão de reservas
+
+// Função para cadastrar uma nova reserva
+void cadastrarReserva() {
+// Verifica se o limite de reservas foi atingido
+if (numReservas >= MAX_ASSENTOS) {
+printf("Limite de reservas atingido!\n");
+return;
+}
+
+Reserva r;
+
+// Solicita e valida o código do voo
+printf("Código do Voo: ");
+if (scanf("%d", &r.codigoVoo) != 1 || r.codigoVoo <= 0) {
+printf("Erro: Código do voo inválido.\n");
+while (getchar() != "\n"); // Limpa o buffer de entrada
+return;
+}
+
+// Verifica se o voo existe
+int vooEncontrado = 0;
+for (int i = 0; i < numVoos; i++) {
+if (voos[i].codigo == r.codigoVoo) {
+vooEncontrado = 1;
+break;
+}
+}
+if (!vooEncontrado) {
+printf("Erro: Código do voo não encontrado.\n");
+return;
+}
+
+// Solicita e valida o número do assento
+printf("Número do Assento: ");
+if (scanf("%d", &r.numeroAssento) != 1 || r.numeroAssento <= 0) {
+printf("Erro: Número do assento inválido.\n");
+while (getchar() != "\n"); // Limpa o buffer de entrada
+return;
+}
+
+// Verifica se o assento existe e está disponível
+int assentoEncontrado = 0;
+for (int i = 0; i < numAssentos; i++) {
+if (assentos[i].codigoVoo == r.codigoVoo && assentos[i].numeroAssento == r.numeroAssento) {
+assentoEncontrado = 1;
+if (assentos[i].status == 1) {
+printf("Erro: O assento já está ocupado.\n");
+return;
+}
+break;
+}
+}
+if (!assentoEncontrado) {
+printf("Erro: Assento não encontrado no voo especificado.\n");
+return;
+}
+
+// Solicita e valida o código do passageiro
+printf("Código do Passageiro: ");
+if (scanf("%d", &r.codigoPassageiro) != 1 || r.codigoPassageiro <= 0) {
+printf("Erro: Código do passageiro inválido.\n");
+while (getchar() != "\n"); // Limpa o buffer de entrada
+return;
+}
+
+// Verifica se o passageiro existe
+int passageiroEncontrado = 0;
+for (int i = 0; i < numPassageiros; i++) {
+if (passageiros[i].codigo == r.codigoPassageiro) {
+passageiroEncontrado = 1;
+break;
+}
+}
+if (!passageiroEncontrado) {
+printf("Erro: Código do passageiro não encontrado.\n");
+return;
+}
+
+// Atualiza o status do assento para ocupado
+for (int i = 0; i < numAssentos; i++) {
+if (assentos[i].codigoVoo == r.codigoVoo && assentos[i].numeroAssento == r.numeroAssento) {
+assentos[i].status = 1;
+break;
+}
+}
+
+// Atualiza os pontos de fidelidade do passageiro
+for (int i = 0; i < numPassageiros; i++) {
+if (passageiros[i].codigo == r.codigoPassageiro) {
+passageiros[i].pontos += FIDELIDADE_PONTOS;
+break;
+}
+}
+
+// Adiciona a reserva ao array global
+reservas[numReservas++] = r;
+printf("Reserva realizada com sucesso!\n");
+}
+
+
+// Função para listar todas as reservas cadastradas
+void listarReservas() {
+// Verifica se há reservas cadastradas
+if (numReservas == 0) {
+printf("Nenhuma reserva cadastrada.\n");
+return;
+}
+
+// Exibe a lista de reservas
+printf("\n===== Lista de Reservas =====\n");
+for (int i = 0; i < numReservas; i++) {
+Reserva r = reservas[i];
+printf("Código do Voo: %d, Número do Assento: %d, Código do Passageiro: %d\n",
+r.codigoVoo, r.numeroAssento, r.codigoPassageiro);
+}
+}
+
+// Função para alterar uma reserva existente
+void alterarReserva() {
+int codigoVoo, numeroAssento;
+
+// Solicita o código do voo e o número do assento da reserva
+printf("Informe o código do voo da reserva: ");
+if (scanf("%d", &codigoVoo) != 1 || codigoVoo <= 0) {
+printf("Erro: Código do voo inválido.\n");
+while (getchar() != "\n"); // Limpa o buffer de entrada
+return;
+}
+
+printf("Informe o número do assento da reserva: ");
+if (scanf("%d", &numeroAssento) != 1 || numeroAssento <= 0) {
+printf("Erro: Número do assento inválido.\n");
+while (getchar() != "\n"); // Limpa o buffer de entrada
+return;
+}
+
+// Procura a reserva no array global
+for (int i = 0; i < numReservas; i++) {
+if (reservas[i].codigoVoo == codigoVoo && reservas[i].numeroAssento == numeroAssento) {
+// Solicita novos valores para a reserva
+printf("Novo código do voo: ");
+if (scanf("%d", &reservas[i].codigoVoo) != 1 || reservas[i].codigoVoo <= 0) {
+printf("Erro: Código do voo inválido.\n");
+while (getchar() != "\n");
+return;
+}
+
+printf("Novo número do assento: ");
+if (scanf("%d", &reservas[i].numeroAssento) != 1 || reservas[i].numeroAssento <= 0) {
+printf("Erro: Número do assento inválido.\n");
+while (getchar() != "\n");
+return;
+}
+
+printf("Novo código do passageiro: ");
+if (scanf("%d", &reservas[i].codigoPassageiro) != 1 || reservas[i].codigoPassageiro <= 0) {
+printf("Erro: Código do passageiro inválido.\n");
+while (getchar() != "\n");
+return;
+}
+
+printf("Reserva alterada com sucesso!\n");
+return;
+}
+}
+
+// Caso a reserva não seja encontrada
+printf("Reserva não encontrada.\n");
+}
+
+// Função para excluir uma reserva existente
+void excluirReserva() {
+int codigoVoo, numeroAssento;
+
+// Solicita o código do voo e o número do assento da reserva
+printf("Informe o código do voo da reserva: ");
+if (scanf("%d", &codigoVoo) != 1 || codigoVoo <= 0) {
+printf("Erro: Código do voo inválido.\n");
+while (getchar() != "\n"); // Limpa o buffer de entrada
+return;
+}
+
+printf("Informe o número do assento da reserva: ");
+if (scanf("%d", &numeroAssento) != 1 || numeroAssento <= 0) {
+printf("Erro: Número do assento inválido.\n");
+while (getchar() != "\n"); // Limpa o buffer de entrada
+return;
+}
+
+// Procura a reserva no array global
+for (int i = 0; i < numReservas; i++) {
+if (reservas[i].codigoVoo == codigoVoo && reservas[i].numeroAssento == numeroAssento) {
+// Remove a reserva deslocando os elementos subsequentes
+for (int j = i; j < numReservas - 1; j++) {
+reservas[j] = reservas[j + 1];
+}
+
+// Decrementa o contador de reservas
+numReservas--;
+
+printf("Reserva excluída com sucesso!\n");
+return;
+}
+}
+
+// Caso a reserva não seja encontrada
+printf("Reserva não encontrada.\n");
 }
