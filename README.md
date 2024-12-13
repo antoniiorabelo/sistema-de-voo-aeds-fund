@@ -20,7 +20,83 @@ Diante dessa situação, foi decidido implementar um sistema em linguagem C para
  - **typedef struct Voo**: Armazena as informações dos voos incluindo: origem, data, hora, destino, codigo do aviao, codigo do piloto, codigo do copilo e status (1 = ativo / 0 = inativo).
 - **typedef struct Assento**: Armazena as informações do assento incluindo: numero do assento, codigo do voo e status (1 = ocupado / 0 = livre).
 - **typedef struct Reserva**: Armazena as informaçoes da reserva incluindo: codigo do voo, numero do assento e codigo do passageiro.
-#Funções Ultilizadas
+# Funções Ultilizadas
+ - **Cadastrar Passageiro:**
+
+Função que adiciona um novo passageiro ao sistema, atribuindo-lhe um código único.
+Verifica se há espaço suficiente no array de passageiros.
+Solicita e armazena informações como nome, endereço, telefone, e dados de fidelidade.
+- **Listar Passageiros:**
+
+Exibe a lista de passageiros cadastrados no sistema.
+- **Alterar Passageiro:**
+
+Permite alterar as informações de um passageiro existente, como nome, endereço ou telefone.
+- **Excluir Passageiro:**
+
+Exclui um passageiro do sistema, removendo-o do array de passageiros.
+- **Cadastrar Tripulante:**
+
+Função que adiciona um novo tripulante ao sistema, atribuindo-lhe um código único.
+Solicita dados como nome, telefone e cargo (piloto, copiloto, comissário, etc.).
+- **Listar Tripulantes:**
+
+Exibe a lista de tripulantes cadastrados no sistema.
+- **Alterar Tripulante:**
+
+Permite alterar as informações de um tripulante existente.
+ - **Excluir Tripulante:**
+
+Exclui um tripulante do sistema.
+- **Cadastrar Voo:**
+
+Adiciona um novo voo ao sistema, com informações como data, hora, origem, destino, tripulação (piloto e copiloto), e tarifa.
+- **Listar Voos:**
+
+Exibe a lista de voos disponíveis no sistema.
+- **Alterar Voo:**
+
+Permite alterar as informações de um voo, como data, hora, origem, destino, etc.
+- **Excluir Voo:**
+
+Exclui um voo do sistema.
+- **Cadastrar Assento:**
+
+Cadastra os assentos de um voo, indicando se estão livres ou ocupados.
+- **Listar Assentos:**
+
+Exibe a lista de assentos disponíveis ou ocupados para um voo.
+- **Alterar Assento:**
+
+Permite alterar o status de um assento (livre ou ocupado).
+- **Excluir Assento:**
+
+Exclui um assento do sistema.
+- **Cadastrar Reserva:**
+
+Registra uma nova reserva para um passageiro, incluindo a atribuição de um assento em um voo.
+- **Listar Reservas:**
+
+Exibe as reservas feitas pelos passageiros, mostrando o número do voo e o assento reservado.
+- **Alterar Reserva:**
+
+Permite alterar uma reserva, como trocar o assento ou o voo.
+- **Excluir Reserva:**
+
+Exclui uma reserva do sistema.
+- **Exibir Informações:**
+
+Exibe informações gerais sobre o sistema, como número de passageiros, tripulantes, voos, etc.
+- **Backup de Dados:**
+
+Cria uma cópia de segurança dos dados em arquivos.
+- **Restaurar Dados:**
+
+Restaura os dados do sistema a partir de backups armazenados.
+# Casos de Teste
+- ** void testarCadastroPassageiros():** A função testarCadastroPasssageiros testa o cadastro de passageiros em um sistema, redirecionando a entrada padrão para ler dados de um arquivo e executando a função "cadastrarPassageiros" para adicionar passageiros a um array. Após verificar o número de passageiros cadastrados, ela imprime e valida os dados de cada cliente usando asserções.
+- **void testarVoo():** A função "testarVoo" lê dados do voo de um arquivo "vooTeste.txt" e os cadastra em um array até atingir o limite "MAX_VOO". Para cada voo, são validados origem, data, hora, destino, codigo do aviao, codigo do piloto, codigo do copilo e status (1 = ativo / 0 = inativo) atribuindo um código sequencial. Caso a leitura dos dados falhe ou os dados sejam inválidos, uma mensagem de erro é exibida. Se não houver dados suficientes, voos já cadastrados são duplicados automaticamente para preencher o array. Ao final, a lista de funcionários cadastrados é impressa e verificada.
+
 
 
 
