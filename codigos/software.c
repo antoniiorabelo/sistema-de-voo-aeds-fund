@@ -224,7 +224,7 @@ do {
 printf("Fidelidade (1 para Sim, 0 para Nao): ");
 if (scanf("%d", &p.fidelidade) != 1 || (p.fidelidade != 0 && p.fidelidade != 1)) {
 printf("Erro: Valor inválido. Digite 1 para Sim ou 0 para Nao.\n");
-while (getchar() != "\n"); // Limpa o buffer de entrada
+while (getchar() != '\n'); // Limpa o buffer de entrada
 } else {
 break; // Valor válido
 }
@@ -915,8 +915,8 @@ return;
 }
 }
 
-// Define o assento como ocupado (1) por padrão
-a.status = 1; // Status 1 significa assento ocupado
+// Define o assento como livre (0) por padrão
+a.status = 0; // Status 0 significa assento livre
 
 // Adiciona o assento ao array
 assentos[numAssentos++] = a;
@@ -925,7 +925,7 @@ backupDados(); // Atualiza backup após cadastro
 printf("Assento cadastrado com sucesso! Numero: %d\n", a.numeroAssento);
 }
 
-// Função para exibir a lista de assentos
+// Função para listar a lista de assentos
 void listarAssentos() {
 printf("\n===== Lista de Assentos =====\n");
 for (int i = 0; i < numAssentos; i++) {
@@ -1029,8 +1029,6 @@ return;
 printf("Assento não encontrado.\n");
 }
 
-// Funções de cadastro, listagem, alteração e exclusão de reservas
-
 // Função para cadastrar uma nova reserva
 void cadastrarReserva() {
 // Verifica se o limite de reservas foi atingido
@@ -1045,7 +1043,7 @@ Reserva r;
 printf("Código do Voo: ");
 if (scanf("%d", &r.codigoVoo) != 1 || r.codigoVoo <= 0) {
 printf("Erro: Código do voo inválido.\n");
-while (getchar() != "\n"); // Limpa o buffer de entrada
+while (getchar() != '\n'); // Limpa o buffer de entrada
 return;
 }
 
@@ -1066,7 +1064,7 @@ return;
 printf("Número do Assento: ");
 if (scanf("%d", &r.numeroAssento) != 1 || r.numeroAssento <= 0) {
 printf("Erro: Número do assento inválido.\n");
-while (getchar() != "\n"); // Limpa o buffer de entrada
+while (getchar() != '\n'); // Limpa o buffer de entrada
 return;
 }
 
@@ -1076,8 +1074,8 @@ for (int i = 0; i < numAssentos; i++) {
 if (assentos[i].codigoVoo == r.codigoVoo && assentos[i].numeroAssento == r.numeroAssento) {
 assentoEncontrado = 1;
 if (assentos[i].status == 1) {
-printf("Erro: O assento já está ocupado.\n");
-return;
+    printf("Erro: O assento já está ocupado.\n");
+    return;
 }
 break;
 }
@@ -1091,7 +1089,7 @@ return;
 printf("Código do Passageiro: ");
 if (scanf("%d", &r.codigoPassageiro) != 1 || r.codigoPassageiro <= 0) {
 printf("Erro: Código do passageiro inválido.\n");
-while (getchar() != "\n"); // Limpa o buffer de entrada
+while (getchar() != '\n'); // Limpa o buffer de entrada
 return;
 }
 
@@ -1111,7 +1109,7 @@ return;
 // Atualiza o status do assento para ocupado
 for (int i = 0; i < numAssentos; i++) {
 if (assentos[i].codigoVoo == r.codigoVoo && assentos[i].numeroAssento == r.numeroAssento) {
-assentos[i].status = 1;
+assentos[i].status = 1; // Marca o assento como ocupado
 break;
 }
 }
@@ -1119,7 +1117,7 @@ break;
 // Atualiza os pontos de fidelidade do passageiro
 for (int i = 0; i < numPassageiros; i++) {
 if (passageiros[i].codigo == r.codigoPassageiro) {
-passageiros[i].pontos += FIDELIDADE_PONTOS;
+passageiros[i].pontos += FIDELIDADE_PONTOS; // Adiciona pontos de fidelidade
 break;
 }
 }
@@ -1129,8 +1127,6 @@ reservas[numReservas++] = r;
 backupDados(); // Atualiza backup após cadastro
 printf("Reserva realizada com sucesso!\n");
 }
-
-
 // Função para listar todas as reservas cadastradas
 void listarReservas() {
 // Verifica se há reservas cadastradas
@@ -1156,14 +1152,14 @@ int codigoVoo, numeroAssento;
 printf("Informe o código do voo da reserva: ");
 if (scanf("%d", &codigoVoo) != 1 || codigoVoo <= 0) {
 printf("Erro: Código do voo inválido.\n");
-while (getchar() != "\n"); // Limpa o buffer de entrada
+while (getchar() != '\n'); // Limpa o buffer de entrada
 return;
 }
 
 printf("Informe o número do assento da reserva: ");
 if (scanf("%d", &numeroAssento) != 1 || numeroAssento <= 0) {
 printf("Erro: Número do assento inválido.\n");
-while (getchar() != "\n"); // Limpa o buffer de entrada
+while (getchar() != '\n'); // Limpa o buffer de entrada
 return;
 }
 
@@ -1174,21 +1170,21 @@ if (reservas[i].codigoVoo == codigoVoo && reservas[i].numeroAssento == numeroAss
 printf("Novo código do voo: ");
 if (scanf("%d", &reservas[i].codigoVoo) != 1 || reservas[i].codigoVoo <= 0) {
 printf("Erro: Código do voo inválido.\n");
-while (getchar() != "\n");
+while (getchar() != '\n');
 return;
 }
 
 printf("Novo número do assento: ");
 if (scanf("%d", &reservas[i].numeroAssento) != 1 || reservas[i].numeroAssento <= 0) {
 printf("Erro: Número do assento inválido.\n");
-while (getchar() != "\n");
+while (getchar() != '\n');
 return;
 }
 
 printf("Novo código do passageiro: ");
 if (scanf("%d", &reservas[i].codigoPassageiro) != 1 || reservas[i].codigoPassageiro <= 0) {
 printf("Erro: Código do passageiro inválido.\n");
-while (getchar() != "\n");
+while (getchar() != '\n');
 return;
 }
 
@@ -1201,7 +1197,6 @@ return;
 // Caso a reserva não seja encontrada
 printf("Reserva não encontrada.\n");
 }
-
 // Função para excluir uma reserva existente
 void excluirReserva() {
 int codigoVoo, numeroAssento;
@@ -1210,14 +1205,14 @@ int codigoVoo, numeroAssento;
 printf("Informe o código do voo da reserva: ");
 if (scanf("%d", &codigoVoo) != 1 || codigoVoo <= 0) {
 printf("Erro: Código do voo inválido.\n");
-while (getchar() != "\n"); // Limpa o buffer de entrada
+while (getchar() != '\n'); // Limpa o buffer de entrada
 return;
 }
 
 printf("Informe o número do assento da reserva: ");
 if (scanf("%d", &numeroAssento) != 1 || numeroAssento <= 0) {
 printf("Erro: Número do assento inválido.\n");
-while (getchar() != "\n"); // Limpa o buffer de entrada
+while (getchar() != '\n'); // Limpa o buffer de entrada
 return;
 }
 
@@ -1241,7 +1236,6 @@ return;
 // Caso a reserva não seja encontrada
 printf("Reserva não encontrada.\n");
 }
-
 // pesquisar por pessoa
 void exibirInformacoes() {
 int opcao, codigo;
