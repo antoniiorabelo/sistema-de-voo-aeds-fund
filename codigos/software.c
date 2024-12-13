@@ -4,58 +4,53 @@
 #include <ctype.h>
 #include <time.h>
 
+// Definição de constantes
+#define MAX_PASSAGEIROS 100
+#define MAX_TRIPULANTES 50
+#define MAX_VOOS 50
+#define MAX_ASSENTOS 200
+#define FIDELIDADE_PONTOS 10
 
-// Definição de constantes para os limites do sistema
-#define MAX_PASSAGEIROS 100 // Máximo de passageiros permitidos
-#define MAX_TRIPULANTES 50 // Máximo de tripulantes permitidos
-#define MAX_VOOS 50        // Máximo de voos permitidos
-#define MAX_ASSENTOS 200   // Máximo de assentos por voo
-#define FIDELIDADE_PONTOS 10 // Pontos de fidelidade atribuídos por voo
-
-// Estrutura para armazenar dados de passageiros
+// Estruturas de dados
 typedef struct {
-int codigo;              // Código único do passageiro
-char nome[50];           // Nome do passageiro
-char endereco[100];      // Endereço do passageiro
-char telefone[15];       // Telefone do passageiro
-int fidelidade;          // Indicador de participação no programa de fidelidade (1: sim, 0: não)
-int pontos;              // Pontos acumulados no programa de fidelidade
+int codigo;
+char nome[50];
+char endereco[100];
+char telefone[15];
+int fidelidade; // 1 para sim, 0 para não
+int pontos;
 } Passageiro;
 
-// Estrutura para armazenar dados de tripulantes
 typedef struct {
-int codigo;              // Código único do tripulante
-char nome[50];           // Nome do tripulante
-char telefone[15];       // Telefone do tripulante
-char cargo[20];          // Cargo do tripulante (Piloto, Copiloto, Comissário)
+int codigo;
+char nome[50];
+char telefone[15];
+char cargo[20]; // Piloto, Copiloto, Comissário
 } Tripulante;
 
-// Estrutura para armazenar dados de voos
 typedef struct {
-int codigo;              // Código único do voo
-char data[11];           // Data do voo no formato DD/MM/AAAA
-char hora[6];            // Horário do voo no formato HH:MM
-char origem[50];         // Cidade de origem
-char destino[50];        // Cidade de destino
-int codigoAviao;         // Código do avião
-int codigoPiloto;        // Código do piloto responsável
-int codigoCopiloto;      // Código do copiloto
-int status;              // Status do voo (1: ativo, 0: inativo)
-float tarifa;            // Tarifa do voo
+int codigo;
+char data[11];
+char hora[6];
+char origem[50];
+char destino[50];
+int codigoAviao;
+int codigoPiloto;
+int codigoCopiloto;
+int status; // 1 para ativo, 0 para inativo
+float tarifa;
 } Voo;
 
-// Estrutura para armazenar dados de assentos
 typedef struct {
-int numeroAssento;       // Número do assento
-int codigoVoo;           // Código do voo ao qual o assento pertence
-int status;              // Status do assento (1: ocupado, 0: livre)
+int numeroAssento;
+int codigoVoo;
+int status; // 1 para ocupado, 0 para livre
 } Assento;
 
-// Estrutura para armazenar dados de reservas
 typedef struct {
-int codigoVoo;           // Código do voo
-int numeroAssento;       // Número do assento reservado
-int codigoPassageiro;    // Código do passageiro que fez a reserva
+int codigoVoo;
+int numeroAssento;
+int codigoPassageiro;
 } Reserva;
 
 // Arrays globais para armazenar os dados
@@ -65,22 +60,41 @@ Voo voos[MAX_VOOS];
 Assento assentos[MAX_ASSENTOS];
 Reserva reservas[MAX_ASSENTOS];
 
-// Contadores globais para rastrear o número de registros
+// Contadores globais
 int numPassageiros = 0, numTripulantes = 0, numVoos = 0, numAssentos = 0, numReservas = 0;
 
-// Prototipagem das funções
+// Prototipação
 void menu();
 void cadastrarPassageiro();
-int validarNome(const char *nome);
-int validarTelefone(const char *telefone);
+void listarPassageiros();
+void alterarPassageiro();
+void excluirPassageiro();
+void cadastrarTripulante();
+void listarTripulantes();
+void alterarTripulante();
+void excluirTripulante();
+void cadastrarVoo();
+void listarVoos();
+void alterarVoo();
+void excluirVoo();
+void cadastrarAssento();
+void listarAssentos();
+void alterarAssento();
+void excluirAssento();
+void cadastrarReserva();
+void listarReservas();
+void alterarReserva();
+void excluirReserva();
+void backupDados();
+void restaurarDados();
 
 // Função principal
 int main() {
-menu(); // Inicia o menu principal do sistema
+menu();
 return 0;
 }
 
-// Exibe o menu principal e gerencia a navegação entre as opções
+// Menu principal
 void menu() {
 int opcao;
 do {
@@ -112,10 +126,10 @@ printf("Selecione uma opcao: ");
 scanf("%d", &opcao);
 
 switch (opcao) {
-case 1: cadastrarPassageiro(); break; // Opção para cadastrar um passageiro
-case 2: listarPassageiros(); break; // opção para listar passageiro
-case 3: alterarPassageiro(); break; //opção para alterar
-case 4: excluirPassageiro(); break; //opção para excluir
+case 1: cadastrarPassageiro(); break;
+case 2: listarPassageiros(); break;
+case 3: alterarPassageiro(); break;
+case 4: excluirPassageiro(); break;
 case 5: cadastrarTripulante(); break;
 case 6: listarTripulantes(); break;
 case 7: alterarTripulante(); break;
@@ -132,9 +146,10 @@ case 17: cadastrarReserva(); break;
 case 18: listarReservas(); break;
 case 19: alterarReserva(); break;
 case 20: excluirReserva(); break;
-
-case 0: printf("Saindo do sistema...\n"); break; // Sair do sistema
-default: printf("Opcao invalida. Tente novamente.\n"); // Opção inválida
+case 21: backupDados(); break;
+case 22: restaurarDados(); break;
+case 0: printf("Saindo do sistema...\n"); break;
+default: printf("Opcao invalida. Tente novamente.\n");
 }
 } while (opcao != 0);
 }
@@ -198,14 +213,21 @@ printf("Erro: O telefone deve conter apenas números. Tente novamente.\n");
 } while (!validarTelefone(p.telefone));
 
 // Solicita a participação no programa de fidelidade
+do {
 printf("Fidelidade (1 para Sim, 0 para Nao): ");
-scanf("%d", &p.fidelidade);
+if (scanf("%d", &p.fidelidade) != 1 || (p.fidelidade != 0 && p.fidelidade != 1)) {
+printf("Erro: Valor inválido. Digite 1 para Sim ou 0 para Nao.\n");
+while (getchar() != '\n'); // Limpa o buffer de entrada
+} else {
+break; // Valor válido
+}
+} while (1);
 p.pontos = 0; // Inicializa os pontos de fidelidade como zero
 
 passageiros[numPassageiros++] = p; // Adiciona o passageiro ao array
+backupDados(); // Atualiza backup após cadastro
 printf("Passageiro cadastrado com sucesso! Codigo: %d\n", p.codigo);
 }
-
 
 // Função para listar todos os passageiros cadastrados
 void listarPassageiros() {
@@ -243,52 +265,6 @@ if (passageiros[i].codigo == codigo) { // Verifica se o código coincide
 
 // Solicita o novo nome do passageiro
 printf("Novo nome: ");
-getchar(); // Limpa o buffer de entrada
-if (fgets(passageiros[i].nome, sizeof(passageiros[i].nome), stdin) != NULL) {
-passageiros[i].nome[strcspn(passageiros[i].nome, "\n")] = 0; // Remove o caractere de nova linha
-}
-
-// Solicita o novo endereço do passageiro
-printf("Novo endereço: ");
-if (fgets(passageiros[i].endereco, sizeof(passageiros[i].endereco), stdin) != NULL) {
-passageiros[i].endereco[strcspn(passageiros[i].endereco, "\n")] = 0;
-}
-
-// Solicita o novo telefone do passageiro
-printf("Novo telefone: ");
-if (fgets(passageiros[i].telefone, sizeof(passageiros[i].telefone), stdin) != NULL) {
-passageiros[i].telefone[strcspn(passageiros[i].telefone, "\n")] = 0;
-}
-
-// Solicita a nova participação no programa de fidelidade
-printf("Fidelidade (1 para Sim, 0 para Não): ");
-scanf("%d", &passageiros[i].fidelidade);
-
-// Informa ao usuário que os dados foram alterados com sucesso
-printf("Passageiro alterado com sucesso!\n");
-return; // Sai da função após encontrar e alterar o passageiro
-}
-}
-
-// Informa ao usuário caso o código do passageiro não seja encontrado
-printf("Passageiro não encontrado.\n");
-}
-
-
-// Função para alterar os dados de um passageiro existente
-void AlterarPassageiro() {
-int codigo; // Variável para armazenar o código do passageiro a ser alterado
-
-// Solicita o código do passageiro ao usuário
-printf("Informe o código do passageiro para alterar: ");
-scanf("%d", &codigo);
-
-// Percorre o array de passageiros em busca do código informado
-for (int i = 0; i < numPassageiros; i++) {
-if (passageiros[i].codigo == codigo) { // Verifica se o código coincide
-
-// Solicita o novo nome do passageiro
-printf("Novo nome: ");
 getchar(); // Limpa o buffer do teclado
 fgets(passageiros[i].nome, 50, stdin);
 passageiros[i].nome[strcspn(passageiros[i].nome, "\n")] = 0; // Remove o caractere de nova linha
@@ -306,6 +282,7 @@ passageiros[i].telefone[strcspn(passageiros[i].telefone, "\n")] = 0;
 // Solicita a nova participação no programa de fidelidade
 printf("Fidelidade (1 para Sim, 0 para Não): ");
 scanf("%d", &passageiros[i].fidelidade);
+backupDados(); // Atualiza backup após alteração
 
 // Informa ao usuário que os dados foram alterados com sucesso
 printf("Passageiro alterado com sucesso!\n");
@@ -336,6 +313,7 @@ passageiros[j] = passageiros[j + 1];
 
 // Decrementa o contador global de passageiros
 numPassageiros--;
+backupDados(); // Atualiza backup após exclusão
 
 // Exibe mensagem de sucesso ao usuário
 printf("Passageiro excluído com sucesso!\n");
@@ -424,6 +402,7 @@ printf("Opção inválida. Escolha 1 para Piloto, 2 para Copiloto ou 3 para Comi
 } while (cargoOpcao < 1 || cargoOpcao > 3); // Garante que apenas valores válidos sejam aceitos
 
 tripulantes[numTripulantes++] = t; // Adiciona o tripulante ao array
+backupDados(); // Atualiza backup após cadastro
 printf("Tripulante cadastrado com sucesso! Codigo: %d\n", t.codigo);
 }
 
@@ -470,6 +449,7 @@ tripulantes[i].telefone[strcspn(tripulantes[i].telefone, "\n")] = 0;
 printf("Novo cargo: ");
 fgets(tripulantes[i].cargo, sizeof(tripulantes[i].cargo), stdin);
 tripulantes[i].cargo[strcspn(tripulantes[i].cargo, "\n")] = 0;
+backupDados(); // Atualiza backup após alteração
 
 // Informa que os dados foram alterados com sucesso
 printf("Tripulante alterado com sucesso!\n");
@@ -500,6 +480,7 @@ tripulantes[j] = tripulantes[j + 1];
 
 // Decrementa o contador global de tripulantes
 numTripulantes--;
+backupDados(); // Atualiza backup após exclusão
 
 // Informa que o tripulante foi excluído com sucesso
 printf("Tripulante excluído com sucesso!\n");
@@ -515,21 +496,33 @@ printf("Tripulante não encontrado.\n");
 
 // Função para validar uma data no formato dd/mm/aaaa
 int validarData(const char *data) {
-if (strlen(data) != 10) return 0; // Verifica se o tamanho é correto
+// Verifica se o tamanho da string é exatamente 10 caracteres (dd/mm/aaaa)
+if (strlen(data) != 10) return 0;
 
 int dia, mes, ano;
-if (sscanf(data, "%d/%d/%d", &dia, &mes, &ano) != 3) return 0; // Converte e valida o formato
 
-if (ano < 1900 || ano > 2100 || mes < 1 || mes > 12 || dia < 1) return 0; // Valida intervalos
+// Verifica se o formato da data é válido e extrai dia, mês e ano
+if (sscanf(data, "%2d/%2d/%4d", &dia, &mes, &ano) != 3) return 0;
 
+// Verifica se o ano está dentro de um intervalo razoável
+if (ano < 1900 || ano > 2100) return 0;
+
+// Verifica se o mês está entre 1 e 12
+if (mes < 1 || mes > 12) return 0;
+
+// Array com os dias máximos de cada mês
 int diasNoMes[] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
 
-// Verifica anos bissextos
+// Ajusta para anos bissextos
 if ((ano % 4 == 0 && ano % 100 != 0) || (ano % 400 == 0)) {
-diasNoMes[1] = 29;
+diasNoMes[1] = 29; // Fevereiro tem 29 dias em anos bissextos
 }
 
-return dia <= diasNoMes[mes - 1];
+// Verifica se o dia está dentro do limite do mês
+if (dia < 1 || dia > diasNoMes[mes - 1]) return 0;
+
+// Data válida
+return 1;
 }
 
 // Função para validar se uma string contém apenas letras
@@ -660,6 +653,7 @@ printf("Voo ativado com sucesso!\n");
 
 // Adiciona o voo ao array
 voos[numVoos++] = v;
+backupDados(); // Atualiza backup após cadastro
 printf("Voo cadastrado com sucesso! Codigo: %d\n", v.codigo);
 }
 
@@ -722,6 +716,7 @@ scanf("%d", &voos[i].codigoCopiloto);
 
 printf("Nova tarifa: ");
 scanf("%f", &voos[i].tarifa);
+backupDados(); // Atualiza backup após exclusão
 
 // Informa que o voo foi alterado com sucesso
 printf("Voo alterado com sucesso!\n");
@@ -752,6 +747,7 @@ voos[j] = voos[j + 1];
 
 // Decrementa o contador global de voos
 numVoos--;
+backupDados(); // Atualiza backup após alteração
 
 // Informa que o voo foi excluído com sucesso
 printf("Voo excluido com sucesso!\n");
@@ -762,6 +758,8 @@ return;
 // Caso o código não seja encontrado
 printf("Voo nao encontrado.\n");
 }
+
+// Funções de cadastro, listagem, alteração e exclusão de assentos
 
 // Função para cadastrar um novo assento
 void cadastrarAssento() {
@@ -803,66 +801,11 @@ a.status = 0; // Define o assento como livre por padrão
 
 // Adiciona o assento ao array
 assentos[numAssentos++] = a;
+backupDados(); // Atualiza backup após cadastro
+
 printf("Assento cadastrado com sucesso! Numero: %d\n", a.numeroAssento);
 }
 
-
-// Funções de cadastro, listagem, alteração e exclusão de assentos
-
-// Função para cadastrar um novo assento
-void CadastrarAssento() {
-// Verifica se o limite de assentos foi atingido
-if (numAssentos >= MAX_ASSENTOS) {
-printf("Limite de assentos atingido!\n");
-return;
-}
-
-Assento a;
-
-// Solicita o número do assento ao usuário
-printf("Número do Assento: ");
-if (scanf("%d", &a.numeroAssento) != 1 || a.numeroAssento <= 0) {
-printf("Erro: Número do assento inválido.\n");
-while (getchar() != "\n"); // Limpa o buffer de entrada
-return;
-}
-
-// Verifica se o número do assento já está em uso
-for (int i = 0; i < numAssentos; i++) {
-if (assentos[i].numeroAssento == a.numeroAssento) {
-printf("Erro: O número do assento já está em uso.\n");
-return;
-}
-}
-
-// Solicita o código do voo ao qual o assento pertence
-printf("Código do Voo: ");
-if (scanf("%d", &a.codigoVoo) != 1 || a.codigoVoo <= 0) {
-printf("Erro: Código do voo inválido.\n");
-while (getchar() != "\n"); // Limpa o buffer de entrada
-return;
-}
-
-// Verifica se o código do voo existe no sistema
-int vooEncontrado = 0;
-for (int i = 0; i < numVoos; i++) {
-if (voos[i].codigo == a.codigoVoo) {
-vooEncontrado = 1;
-break;
-}
-}
-if (!vooEncontrado) {
-printf("Erro: Código do voo não encontrado.\n");
-return;
-}
-
-// Define o status do assento como livre por padrão
-a.status = 0;
-
-// Adiciona o assento ao array global
-assentos[numAssentos++] = a;
-printf("Assento cadastrado com sucesso! Número: %d\n", a.numeroAssento);
-}
 
 // Função para listar todos os assentos cadastrados
 void listarAssentos() {
@@ -925,6 +868,7 @@ while (getchar() != "\n"); // Limpa o buffer de entrada
 return;
 }
 
+backupDados(); // Atualiza backup após alteração
 printf("Assento alterado com sucesso!\n");
 return;
 }
@@ -963,6 +907,7 @@ assentos[j] = assentos[j + 1];
 
 // Decrementa o contador de assentos
 numAssentos--;
+backupDados(); // Atualiza backup após exclusão
 
 printf("Assento excluído com sucesso!\n");
 return;
@@ -972,6 +917,7 @@ return;
 // Caso o assento não seja encontrado
 printf("Assento não encontrado.\n");
 }
+
 // Funções de cadastro, listagem, alteração e exclusão de reservas
 
 // Função para cadastrar uma nova reserva
@@ -1069,6 +1015,7 @@ break;
 
 // Adiciona a reserva ao array global
 reservas[numReservas++] = r;
+backupDados(); // Atualiza backup após cadastro
 printf("Reserva realizada com sucesso!\n");
 }
 
@@ -1134,6 +1081,7 @@ while (getchar() != "\n");
 return;
 }
 
+backupDados(); // Atualiza backup após alteração
 printf("Reserva alterada com sucesso!\n");
 return;
 }
@@ -1172,6 +1120,7 @@ reservas[j] = reservas[j + 1];
 
 // Decrementa o contador de reservas
 numReservas--;
+backupDados(); // Atualiza backup após exclusão
 
 printf("Reserva excluída com sucesso!\n");
 return;
@@ -1180,4 +1129,174 @@ return;
 
 // Caso a reserva não seja encontrada
 printf("Reserva não encontrada.\n");
+}
+
+// Função para realizar o backup dos dados
+void backupDados() {
+// Abre o arquivo para escrita binária
+FILE *file = fopen("backup.bin", "wb");
+if (!file) {
+// Verifica se houve erro ao abrir o arquivo
+printf("Erro ao criar arquivo de backup.\n");
+return;
+}
+
+// Escreve o número de passageiros no arquivo
+if (fwrite(&numPassageiros, sizeof(int), 1, file) != 1) {
+printf("Erro ao salvar o número de passageiros no backup.\n");
+fclose(file);
+return;
+}
+
+// Escreve os dados dos passageiros no arquivo
+if (fwrite(passageiros, sizeof(Passageiro), numPassageiros, file) != numPassageiros) {
+printf("Erro ao salvar os passageiros no backup.\n");
+fclose(file);
+return;
+}
+
+// Escreve o número de tripulantes no arquivo
+if (fwrite(&numTripulantes, sizeof(int), 1, file) != 1) {
+printf("Erro ao salvar o número de tripulantes no backup.\n");
+fclose(file);
+return;
+}
+
+// Escreve os dados dos tripulantes no arquivo
+if (fwrite(tripulantes, sizeof(Tripulante), numTripulantes, file) != numTripulantes) {
+printf("Erro ao salvar os tripulantes no backup.\n");
+fclose(file);
+return;
+}
+
+// Escreve o número de voos no arquivo
+if (fwrite(&numVoos, sizeof(int), 1, file) != 1) {
+printf("Erro ao salvar o número de voos no backup.\n");
+fclose(file);
+return;
+}
+
+// Escreve os dados dos voos no arquivo
+if (fwrite(voos, sizeof(Voo), numVoos, file) != numVoos) {
+printf("Erro ao salvar os voos no backup.\n");
+fclose(file);
+return;
+}
+
+// Escreve o número de assentos no arquivo
+if (fwrite(&numAssentos, sizeof(int), 1, file) != 1) {
+printf("Erro ao salvar o número de assentos no backup.\n");
+fclose(file);
+return;
+}
+
+// Escreve os dados dos assentos no arquivo
+if (fwrite(assentos, sizeof(Assento), numAssentos, file) != numAssentos) {
+printf("Erro ao salvar os assentos no backup.\n");
+fclose(file);
+return;
+}
+
+// Escreve o número de reservas no arquivo
+if (fwrite(&numReservas, sizeof(int), 1, file) != 1) {
+printf("Erro ao salvar o número de reservas no backup.\n");
+fclose(file);
+return;
+}
+
+// Escreve os dados das reservas no arquivo
+if (fwrite(reservas, sizeof(Reserva), numReservas, file) != numReservas) {
+printf("Erro ao salvar as reservas no backup.\n");
+fclose(file);
+return;
+}
+
+// Fecha o arquivo após a escrita
+fclose(file);
+printf("Backup realizado com sucesso!\n");
+}
+
+// Função para restaurar os dados a partir de um backup
+void restaurarDados() {
+// Abre o arquivo para leitura binária
+FILE *file = fopen("backup.bin", "rb");
+if (!file) {
+// Verifica se houve erro ao abrir o arquivo
+printf("Erro ao abrir arquivo de backup.\n");
+return;
+}
+
+// Lê o número de passageiros do arquivo
+if (fread(&numPassageiros, sizeof(int), 1, file) != 1) {
+printf("Erro ao restaurar o número de passageiros.\n");
+fclose(file);
+return;
+}
+
+// Lê os dados dos passageiros do arquivo
+if (fread(passageiros, sizeof(Passageiro), numPassageiros, file) != numPassageiros) {
+printf("Erro ao restaurar os passageiros.\n");
+fclose(file);
+return;
+}
+
+// Lê o número de tripulantes do arquivo
+if (fread(&numTripulantes, sizeof(int), 1, file) != 1) {
+printf("Erro ao restaurar o número de tripulantes.\n");
+fclose(file);
+return;
+}
+
+// Lê os dados dos tripulantes do arquivo
+if (fread(tripulantes, sizeof(Tripulante), numTripulantes, file) != numTripulantes) {
+printf("Erro ao restaurar os tripulantes.\n");
+fclose(file);
+return;
+}
+
+// Lê o número de voos do arquivo
+if (fread(&numVoos, sizeof(int), 1, file) != 1) {
+printf("Erro ao restaurar o número de voos.\n");
+fclose(file);
+return;
+}
+
+// Lê os dados dos voos do arquivo
+if (fread(voos, sizeof(Voo), numVoos, file) != numVoos) {
+printf("Erro ao restaurar os voos.\n");
+fclose(file);
+return;
+}
+
+// Lê o número de assentos do arquivo
+if (fread(&numAssentos, sizeof(int), 1, file) != 1) {
+printf("Erro ao restaurar o número de assentos.\n");
+fclose(file);
+return;
+}
+
+// Lê os dados dos assentos do arquivo
+if (fread(assentos, sizeof(Assento), numAssentos, file) != numAssentos) {
+printf("Erro ao restaurar os assentos.\n");
+fclose(file);
+return;
+}
+
+// Lê o número de reservas do arquivo
+if (fread(&numReservas, sizeof(int), 1, file) != 1) {
+printf("Erro ao restaurar o número de reservas.\n");
+fclose(file);
+return;
+}
+
+// Lê os dados das reservas do arquivo
+if (fread(reservas, sizeof(Reserva), numReservas, file) != numReservas) {
+printf("Erro ao restaurar as reservas.\n");
+fclose(file);
+return;
+}
+
+// Fecha o arquivo após a leitura
+fclose(file);
+printf("Dados restaurados com sucesso!\n");
 }
