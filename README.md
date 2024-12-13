@@ -94,13 +94,52 @@ Cria uma cópia de segurança dos dados em arquivos.
 
 Restaura os dados do sistema a partir de backups armazenados.
 # Casos de Teste
-- ** void testarCadastroPassageiros():** A função testarCadastroPasssageiros testa o cadastro de passageiros em um sistema, redirecionando a entrada padrão para ler dados de um arquivo e executando a função "cadastrarPassageiros" para adicionar passageiros a um array. Após verificar o número de passageiros cadastrados, ela imprime e valida os dados de cada cliente usando asserções.
-- **void testarVoo():** A função "testarVoo" lê dados do voo de um arquivo "vooTeste.txt" e os cadastra em um array até atingir o limite "MAX_VOO". Para cada voo, são validados origem, data, hora, destino, codigo do aviao, codigo do piloto, codigo do copilo e status (1 = ativo / 0 = inativo) atribuindo um código sequencial. Caso a leitura dos dados falhe ou os dados sejam inválidos, uma mensagem de erro é exibida. Se não houver dados suficientes, voos já cadastrados são duplicados automaticamente para preencher o array. Ao final, a lista de funcionários cadastrados é impressa e verificada.
+- **void CadastrarPassageiros():** função alterarPassageiro
+Descrição:
+Permite editar as informações de um passageiro cadastrado, incluindo nome, endereço e telefone, identificando-o pelo código. Agora, a função valida nomes para aceitar apenas letras e espaços.
 
+Etapas:
 
+Solicita o código do passageiro e verifica sua existência.
+Permite alterar o nome com validação (rejeita números e caracteres especiais).
+Permite editar endereço e telefone.
+Atualiza os dados no sistema e confirma a alteração.
+Correção Realizada:
+O problema que impedia a alteração do nome foi resolvido, e a validação de entrada foi implementada.
 
+Mensagem de Erro:
 
+"Nome inválido! Insira apenas letras e espaços."
+
+Objetivo:
+Garantir alterações consistentes e validadas nos dados dos passageiros.
+
+- **void alterarPassageiro():** Função alterarPassageiro
+Descrição:
+Permite alterar os dados de um passageiro cadastrado, incluindo nome, endereço e telefone. Agora, a função realiza a validação do nome para aceitar apenas letras e espaços, rejeitando números ou caracteres especiais.
+
+Principais Etapas:
+
+Solicita o código do passageiro e verifica sua existência.
+Permite a edição do nome com validação:
+Aceita apenas letras e espaços.
+Rejeita entradas inválidas e solicita novo nome.
+Atualiza os demais dados (endereço e telefone) e salva no sistema.
+Exibe confirmação de sucesso.
+Correção Implementada:
+Agora o nome do passageiro pode ser alterado corretamente, com validação para evitar inconsistências.
+
+Mensagem de Erro para Nome Inválido:
+
+"Nome inválido! Insira apenas letras e espaços."
 # Menu 
-![Captura de tela 2024-12-13 141504](https://github.com/user-attachments/assets/0c17bdb7-f752-4d83-94e3-c4f5bc73ce54)
+![Captura de tela 2024-12-13 162521](https://github.com/user-attachments/assets/095133b7-199c-4a39-a433-22c05e9bd9b0)
+
+# Metodos Ágeis 
+Para a confecção de um ótimo trabalho pautado nas boas práticas da engenharia de software, utilizamos o Scrum e o Kanban
+
+- **Scrum:**O framework Scrum, nos auxiliou a organizar o projeto em sprints de aproximadamente 5 dias, onde efetuamos as suas cerimônias criteriosamente. Planejávamos a sprint e definíamos qual seria o backlog da mesma. Realizávamos ¨daily's com durações aproximadas de 5 a 8 minutos. Ao final de cada sprint, revisávamos o que tinha sido concluído e entregue ao cliente e, por fim, revisávamos a maneira como trabalhamos para buscar melhorias no processo.
+- **Kanban:** Utilizamos a funçao do Git Hub para criar um projeto para fazer o acompanhamento visual do projeto através do framework Kanban onde organizamos os requisitos, o backlog do produto, backlog da sprint e separavámos as tarefas da sprint no quadro To-do, Doing, Done.
+
 
 
