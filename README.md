@@ -140,6 +140,24 @@ Para a confecção de um ótimo trabalho pautado nas boas práticas da engenhari
 
 - **Scrum:**O framework Scrum, nos auxiliou a organizar o projeto em sprints de aproximadamente 5 dias, onde efetuamos as suas cerimônias criteriosamente. Planejávamos a sprint e definíamos qual seria o backlog da mesma. Realizávamos ¨daily's com durações aproximadas de 5 a 8 minutos. Ao final de cada sprint, revisávamos o que tinha sido concluído e entregue ao cliente e, por fim, revisávamos a maneira como trabalhamos para buscar melhorias no processo.
 - **Kanban:** Utilizamos a funçao do Git Hub para criar um projeto para fazer o acompanhamento visual do projeto através do framework Kanban onde organizamos os requisitos, o backlog do produto, backlog da sprint e separavámos as tarefas da sprint no quadro To-do, Doing, Done.
+# Evoluçao das Sprints
+Abaixo é possível acompanhar a organização das sprints feita apartir do backlog feito no Github.
+- **BackLog Geral**
+![image](https://github.com/user-attachments/assets/d33431cf-ae50-494f-ba74-80153342109f)
+- **Sprint 1**
+![image](https://github.com/user-attachments/assets/20b219a6-bec1-4345-94c6-6360dba40e0d)
+- **Sprint 2**
+![image](https://github.com/user-attachments/assets/239c8e0d-8d6a-4f79-a34e-72927500868a)
+- **Sprint 3**
+![image](https://github.com/user-attachments/assets/7d97000d-0a89-48a6-942f-f52fcfd22377)
+- **Sprint 4**
+![image](https://github.com/user-attachments/assets/c4878b95-573f-4377-b906-11e4864be129)
+
+# Relatorio de testes
+Em anexo, temos tabelas que representam alguns dos relatórios de testes, neles é possível ver as entradas, classes válidas, classes inválidas e os resultados esperados.
+![image](https://github.com/user-attachments/assets/e9738d07-5f38-4136-8e44-0dc9c5049262)
+![image](https://github.com/user-attachments/assets/57182103-11d0-4c10-89a2-735276094eca)
+![image](https://github.com/user-attachments/assets/6fdc2b4b-410b-44af-8229-2882adcae279)
 
 
 
