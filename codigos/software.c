@@ -102,7 +102,7 @@ return 0;
 void menu() {
 int opcao;
 do {
-printf("\n===== Sistema de Gerenciamento de Voos =====\n");
+printf("\n===== Sistema de Gerenciamento de Voos - Lider Aero =====\n");
 printf("1. Cadastrar Passageiro\n");
 printf("2. Listar Passageiros\n");
 printf("3. Alterar Passageiro\n");
