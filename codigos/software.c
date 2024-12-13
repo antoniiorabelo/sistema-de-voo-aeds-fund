@@ -3,6 +3,7 @@
 #include <string.h>
 #include <ctype.h>
 #include <time.h>
+#include <locale.h>
 
 // Definição de constantes
 #define MAX_PASSAGEIROS 100
@@ -85,11 +86,14 @@ void cadastrarReserva();
 void listarReservas();
 void alterarReserva();
 void excluirReserva();
+void exibirInformacoes();
 void backupDados();
 void restaurarDados();
 
 // Função principal
 int main() {
+
+setlocale(LC_ALL, ""); // Configura o locale para acentos
 menu();
 return 0;
 }
@@ -119,8 +123,9 @@ printf("17. Cadastrar Reserva\n");
 printf("18. Listar Reservas\n");
 printf("19. Alterar Reserva\n");
 printf("20. Excluir Reserva\n");
-printf("21. Backup de Dados\n");
-printf("22. Restaurar Dados\n");
+printf("21. Pesquisar\n");
+printf("22. Backup de Dados\n");
+printf("23. Restaurar Dados\n");
 printf("0. Sair\n");
 printf("Selecione uma opcao: ");
 scanf("%d", &opcao);
@@ -146,8 +151,9 @@ case 17: cadastrarReserva(); break;
 case 18: listarReservas(); break;
 case 19: alterarReserva(); break;
 case 20: excluirReserva(); break;
-case 21: backupDados(); break;
-case 22: restaurarDados(); break;
+case 21: exibirInformacoes(); break;
+case 22: backupDados(); break;
+case 23: restaurarDados(); break;
 case 0: printf("Saindo do sistema...\n"); break;
 default: printf("Opcao invalida. Tente novamente.\n");
 }
@@ -1130,6 +1136,59 @@ return;
 // Caso a reserva não seja encontrada
 printf("Reserva não encontrada.\n");
 }
+
+// pesquisar por pessoa
+void exibirInformacoes() {
+int opcao, codigo;
+printf("\n===== Exibir Informações =====\n");
+printf("Você é:\n");
+printf("1. Passageiro\n");
+printf("2. Tripulante\n");
+printf("Selecione uma opção: ");
+scanf("%d", &opcao);
+
+switch (opcao) {
+case 1: // Exibir informações do passageiro
+printf("Informe o código do passageiro: ");
+scanf("%d", &codigo);
+
+for (int i = 0; i < numPassageiros; i++) {
+if (passageiros[i].codigo == codigo) {
+printf("\n===== Informações do Passageiro =====\n");
+printf("Código: %d\n", passageiros[i].codigo);
+printf("Nome: %s\n", passageiros[i].nome);
+printf("Endereço: %s\n", passageiros[i].endereco);
+printf("Telefone: %s\n", passageiros[i].telefone);
+printf("Fidelidade: %s\n", passageiros[i].fidelidade ? "Sim" : "Não");
+printf("Pontos de Fidelidade: %d\n", passageiros[i].pontos);
+return;
+}
+}
+printf("Passageiro não encontrado.\n");
+break;
+
+case 2: // Exibir informações do tripulante
+printf("Informe o código do tripulante: ");
+scanf("%d", &codigo);
+
+for (int i = 0; i < numTripulantes; i++) {
+if (tripulantes[i].codigo == codigo) {
+printf("\n===== Informações do Tripulante =====\n");
+printf("Código: %d\n", tripulantes[i].codigo);
+printf("Nome: %s\n", tripulantes[i].nome);
+printf("Telefone: %s\n", tripulantes[i].telefone);
+printf("Cargo: %s\n", tripulantes[i].cargo);
+return;
+}
+}
+printf("Tripulante não encontrado.\n");
+break;
+
+default:
+printf("Opção inválida. Tente novamente.\n");
+}
+}
+
 
 // Função para realizar o backup dos dados
 void backupDados() {
