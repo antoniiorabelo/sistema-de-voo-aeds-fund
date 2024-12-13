@@ -38,6 +38,7 @@ char destino[50];
 int codigoAviao;
 int codigoPiloto;
 int codigoCopiloto;
+int codigoComissario; // Adicionei o campo para o comissário
 int status; // 1 para ativo, 0 para inativo
 float tarifa;
 } Voo;
@@ -498,36 +499,29 @@ return;
 printf("Tripulante não encontrado.\n");
 }
 
+
 // Funções de cadastro, listagem, alteração e exclusão de voos
 
 // Função para validar uma data no formato dd/mm/aaaa
 int validarData(const char *data) {
-// Verifica se o tamanho da string é exatamente 10 caracteres (dd/mm/aaaa)
 if (strlen(data) != 10) return 0;
 
 int dia, mes, ano;
 
-// Verifica se o formato da data é válido e extrai dia, mês e ano
 if (sscanf(data, "%2d/%2d/%4d", &dia, &mes, &ano) != 3) return 0;
 
-// Verifica se o ano está dentro de um intervalo razoável
 if (ano < 1900 || ano > 2100) return 0;
 
-// Verifica se o mês está entre 1 e 12
 if (mes < 1 || mes > 12) return 0;
 
-// Array com os dias máximos de cada mês
 int diasNoMes[] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
 
-// Ajusta para anos bissextos
 if ((ano % 4 == 0 && ano % 100 != 0) || (ano % 400 == 0)) {
-diasNoMes[1] = 29; // Fevereiro tem 29 dias em anos bissextos
+diasNoMes[1] = 29;
 }
 
-// Verifica se o dia está dentro do limite do mês
 if (dia < 1 || dia > diasNoMes[mes - 1]) return 0;
 
-// Data válida
 return 1;
 }
 
@@ -559,8 +553,40 @@ for (int i = 0; i < numTripulantes; i++) {
 if (strcmp(tripulantes[i].cargo, "Copiloto") == 0 && tripulantes[i].codigo == codigo) return 1;
 }
 break;
+case 4: // Comissários
+for (int i = 0; i < numTripulantes; i++) {
+if (strcmp(tripulantes[i].cargo, "Comissário") == 0 && tripulantes[i].codigo == codigo) return 1;
+}
+break;
 }
 return 0;
+}
+
+// Função para verificar se o código do avião já está em uso
+int verificarCodigoAviao(int codigoAviao) {
+for (int i = 0; i < numVoos; i++) {
+if (voos[i].codigoAviao == codigoAviao) {
+return 1; // Avião já está em um voo
+}
+}
+return 0; // Avião não está em uso
+}
+
+// Função para verificar se o tripulante (piloto/copiloto/comissário) já está em outro voo ativo na mesma data e hora
+int verificarTripulanteNoVoo(int codigo, int tipoTripulante, const char *data, const char *hora) {
+// Percorre todos os voos cadastrados
+for (int i = 0; i < numVoos; i++) {
+// Verifica se o voo está ativo e se a data e hora do voo são iguais às fornecidas
+if (voos[i].status == 1 && strcmp(voos[i].data, data) == 0 && strcmp(voos[i].hora, hora) == 0) {
+// Verifica o tipo de tripulante e se ele já está alocado para o voo
+if ((tipoTripulante == 2 && voos[i].codigoPiloto == codigo) ||  // Piloto
+(tipoTripulante == 3 && voos[i].codigoCopiloto == codigo) || // Copiloto
+(tipoTripulante == 4 && voos[i].codigoComissario == codigo)) { // Comissário
+return 1; // Tripulante já está alocado em outro voo ativo na mesma data e hora
+}
+}
+}
+return 0; // Tripulante não está alocado em outro voo ativo na mesma data e hora
 }
 
 // Função para cadastrar um novo voo
@@ -576,12 +602,20 @@ v.codigo = numVoos + 1; // Gera um código único para o voo
 // Solicita e valida a data
 do {
 printf("Data (dd/mm/aaaa): ");
-getchar(); // Limpa o buffer do teclado
-fgets(v.data, sizeof(v.data), stdin);
-v.data[strcspn(v.data, "\n")] = 0; // Remove o caractere de nova linha
-
+scanf(" %[^\n]", v.data); // Captura a data até o caractere de nova linha
 if (!validarData(v.data)) {
 printf("Erro: Data inválida. Tente novamente.\n");
+} else {
+break;
+}
+} while (1);
+
+// Solicita e valida a hora
+do {
+printf("Hora (hh:mm): ");
+scanf(" %[^\n]", v.hora); // Captura a hora até o caractere de nova linha
+if (strlen(v.hora) != 5 || v.hora[2] != ':' || v.hora[0] < '0' || v.hora[0] > '2' || v.hora[1] < '0' || v.hora[1] > '9' || v.hora[3] < '0' || v.hora[3] > '5' || v.hora[4] < '0' || v.hora[4] > '9') {
+printf("Erro: Hora inválida. Tente novamente.\n");
 } else {
 break;
 }
@@ -590,9 +624,7 @@ break;
 // Solicita e valida a origem
 do {
 printf("Origem: ");
-fgets(v.origem, sizeof(v.origem), stdin);
-v.origem[strcspn(v.origem, "\n")] = 0; // Remove o caractere de nova linha
-
+scanf(" %[^\n]", v.origem); // Captura a origem até o caractere de nova linha
 if (!validarLetras(v.origem)) {
 printf("Erro: Origem deve conter apenas letras.\n");
 } else {
@@ -603,9 +635,7 @@ break;
 // Solicita e valida o destino
 do {
 printf("Destino: ");
-fgets(v.destino, sizeof(v.destino), stdin);
-v.destino[strcspn(v.destino, "\n")] = 0; // Remove o caractere de nova linha
-
+scanf(" %[^\n]", v.destino); // Captura o destino até o caractere de nova linha
 if (!validarLetras(v.destino)) {
 printf("Erro: Destino deve conter apenas letras.\n");
 } else {
@@ -617,9 +647,8 @@ break;
 do {
 printf("Codigo do Aviao: ");
 scanf("%d", &v.codigoAviao);
-
-if (!verificarCodigo(v.codigoAviao, 1)) {
-printf("Erro: Codigo do avião não encontrado.\n");
+if (verificarCodigoAviao(v.codigoAviao)) {
+printf("Erro: O código do avião já está em uso em outro voo.\n");
 } else {
 break;
 }
@@ -629,9 +658,10 @@ break;
 do {
 printf("Codigo do Piloto: ");
 scanf("%d", &v.codigoPiloto);
-
-if (!verificarCodigo(v.codigoPiloto, 2)) {
+if (verificarCodigo(v.codigoPiloto, 2) == 0) {
 printf("Erro: Codigo do piloto não encontrado.\n");
+} else if (verificarTripulanteNoVoo(v.codigoPiloto, 2, v.data, v.hora)) {
+printf("Erro: Piloto já está alocado em outro voo na mesma data e hora.\n");
 } else {
 break;
 }
@@ -641,9 +671,23 @@ break;
 do {
 printf("Codigo do Copiloto: ");
 scanf("%d", &v.codigoCopiloto);
-
-if (!verificarCodigo(v.codigoCopiloto, 3)) {
+if (verificarCodigo(v.codigoCopiloto, 3) == 0) {
 printf("Erro: Codigo do copiloto não encontrado.\n");
+} else if (verificarTripulanteNoVoo(v.codigoCopiloto, 3, v.data, v.hora)) {
+printf("Erro: Copiloto já está alocado em outro voo na mesma data e hora.\n");
+} else {
+break;
+}
+} while (1);
+
+// Solicita e valida o código do comissário (opcional)
+do {
+printf("Codigo do Comissario (opcional, 0 para pular): ");
+scanf("%d", &v.codigoComissario);
+if (v.codigoComissario != 0 && verificarCodigo(v.codigoComissario, 4) == 0) {
+printf("Erro: Codigo do comissário não encontrado.\n");
+} else if (v.codigoComissario != 0 && verificarTripulanteNoVoo(v.codigoComissario, 4, v.data, v.hora)) {
+printf("Erro: Comissário já está alocado em outro voo na mesma data e hora.\n");
 } else {
 break;
 }
@@ -659,11 +703,8 @@ printf("Voo ativado com sucesso!\n");
 
 // Adiciona o voo ao array
 voos[numVoos++] = v;
-backupDados(); // Atualiza backup após cadastro
 printf("Voo cadastrado com sucesso! Codigo: %d\n", v.codigo);
 }
-
-
 // Função para listar todos os voos cadastrados
 void listarVoos() {
 if (numVoos == 0) { // Verifica se há voos cadastrados
@@ -678,9 +719,37 @@ Voo v = voos[i];
 printf("Codigo: %d, Data: %s, Hora: %s, Origem: %s, Destino: %s, Status: %s, Tarifa: %.2f\n",
 v.codigo, v.data, v.hora, v.origem, v.destino,
 v.status ? "Ativo" : "Inativo", v.tarifa);
+
+// Exibe o piloto
+printf("Piloto: %d - ", v.codigoPiloto);
+for (int j = 0; j < numTripulantes; j++) {
+if (tripulantes[j].codigo == v.codigoPiloto) {
+printf("%s (%s)\n", tripulantes[j].nome, tripulantes[j].cargo);
+break;
 }
 }
 
+// Exibe o copiloto
+printf("Copiloto: %d - ", v.codigoCopiloto);
+for (int j = 0; j < numTripulantes; j++) {
+if (tripulantes[j].codigo == v.codigoCopiloto) {
+printf("%s (%s)\n", tripulantes[j].nome, tripulantes[j].cargo);
+break;
+}
+}
+
+// Exibe o comissário (se houver)
+if (v.codigoComissario != 0) {
+printf("Comissário: %d - ", v.codigoComissario);
+for (int j = 0; j < numTripulantes; j++) {
+if (tripulantes[j].codigo == v.codigoComissario) {
+printf("%s (%s)\n", tripulantes[j].nome, tripulantes[j].cargo);
+break;
+}
+}
+}
+}
+}
 // Função para alterar os dados de um voo existente
 void alterarVoo() {
 int codigo; // Variável para armazenar o código do voo a ser alterado
@@ -693,23 +762,54 @@ scanf("%d", &codigo);
 for (int i = 0; i < numVoos; i++) {
 if (voos[i].codigo == codigo) { // Verifica se o código coincide
 
-// Solicita os novos dados do voo
+// Verificar se os tripulantes estão disponíveis
+int tripulanteConflicto = 0;
+char novaData[11], novaHora[6];
+
+// Solicita e valida nova data e hora
+do {
 printf("Nova data (dd/mm/aaaa): ");
-getchar(); // Limpa o buffer do teclado
-fgets(voos[i].data, 11, stdin);
-voos[i].data[strcspn(voos[i].data, "\n")] = 0;
+scanf(" %[^\n]", novaData);
+if (!validarData(novaData)) {
+printf("Erro: Data inválida. Tente novamente.\n");
+} else {
+break;
+}
+} while (1);
 
+do {
 printf("Nova hora (hh:mm): ");
-fgets(voos[i].hora, 6, stdin);
-voos[i].hora[strcspn(voos[i].hora, "\n")] = 0;
+scanf(" %[^\n]", novaHora);
+if (strlen(novaHora) != 5 || novaHora[2] != ':' || novaHora[0] < '0' || novaHora[0] > '2' || novaHora[1] < '0' || novaHora[1] > '9' || novaHora[3] < '0' || novaHora[3] > '5' || novaHora[4] < '0' || novaHora[4] > '9') {
+printf("Erro: Hora inválida. Tente novamente.\n");
+} else {
+break;
+}
+} while (1);
 
+// Verifica se o piloto, copiloto e comissário estão disponíveis
+if (verificarTripulanteNoVoo(voos[i].codigoPiloto, 2, novaData, novaHora) ||
+verificarTripulanteNoVoo(voos[i].codigoCopiloto, 3, novaData, novaHora) ||
+(voos[i].codigoComissario != 0 && verificarTripulanteNoVoo(voos[i].codigoComissario, 4, novaData, novaHora))) {
+tripulanteConflicto = 1;
+}
+
+// Se houver conflito, avisa e retorna
+if (tripulanteConflicto) {
+printf("Erro: Um ou mais membros da tripulação estão alocados em outro voo na mesma data e hora.\n");
+return;
+}
+
+// Caso não haja conflito, atualiza os dados do voo
+strcpy(voos[i].data, novaData);
+strcpy(voos[i].hora, novaHora);
+
+// Solicita os novos dados do voo
 printf("Nova origem: ");
-fgets(voos[i].origem, 50, stdin);
-voos[i].origem[strcspn(voos[i].origem, "\n")] = 0;
+scanf(" %[^\n]", voos[i].origem);
 
 printf("Novo destino: ");
-fgets(voos[i].destino, 50, stdin);
-voos[i].destino[strcspn(voos[i].destino, "\n")] = 0;
+scanf(" %[^\n]", voos[i].destino);
 
 printf("Novo código do avião: ");
 scanf("%d", &voos[i].codigoAviao);
@@ -720,9 +820,13 @@ scanf("%d", &voos[i].codigoPiloto);
 printf("Novo código do copiloto: ");
 scanf("%d", &voos[i].codigoCopiloto);
 
+printf("Novo código do comissário (0 para pular): ");
+scanf("%d", &voos[i].codigoComissario);
+
 printf("Nova tarifa: ");
 scanf("%f", &voos[i].tarifa);
-backupDados(); // Atualiza backup após exclusão
+
+backupDados(); // Atualiza backup após alteração
 
 // Informa que o voo foi alterado com sucesso
 printf("Voo alterado com sucesso!\n");
@@ -746,6 +850,15 @@ scanf("%d", &codigo);
 for (int i = 0; i < numVoos; i++) {
 if (voos[i].codigo == codigo) { // Verifica se o código coincide
 
+// Verifica se o voo está ativo e se a tripulação está alocada em outro voo
+if (voos[i].status == 1 &&
+(verificarTripulanteNoVoo(voos[i].codigoPiloto, 2, voos[i].data, voos[i].hora) ||
+verificarTripulanteNoVoo(voos[i].codigoCopiloto, 3, voos[i].data, voos[i].hora) ||
+(voos[i].codigoComissario != 0 && verificarTripulanteNoVoo(voos[i].codigoComissario, 4, voos[i].data, voos[i].hora)))) {
+printf("Erro: O voo não pode ser excluído porque está em andamento ou a tripulação está alocada em outro voo ativo.\n");
+return;
+}
+
 // Desloca todos os voos subsequentes uma posição para trás
 for (int j = i; j < numVoos - 1; j++) {
 voos[j] = voos[j + 1];
@@ -753,7 +866,7 @@ voos[j] = voos[j + 1];
 
 // Decrementa o contador global de voos
 numVoos--;
-backupDados(); // Atualiza backup após alteração
+backupDados(); // Atualiza backup após exclusão
 
 // Informa que o voo foi excluído com sucesso
 printf("Voo excluido com sucesso!\n");
