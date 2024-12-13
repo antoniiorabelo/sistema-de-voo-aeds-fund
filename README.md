@@ -14,4 +14,17 @@ Diante dessa situação, foi decidido implementar um sistema em linguagem C para
 - **string.h**: Utilizado para manipulação de strings, exemplo cópia, concatenação, etc.
 - **ctype.h**: Usada para manipulação e classificação de caracteres.
 - **unity.h**: Ultilizada para manipular os casos de teste, auxilia na confirmação de testes.
+# Estrutura de Dados
+- **typedef struct Passageiros**: Armazena as informações dos passageiros incluindo: código, nome, endereço e telefone, fidelidade (1 = sim / 0 = nao) e pontos.
+- **typedef struct Tripulantes**: Armazena as informações dos tripulantes incluindo: código, nome, telefone e cargo.
+ - **typedef struct Voo**: Armazena as informações dos voos incluindo: origem, data, hora, destino, codigo do aviao, codigo do piloto, codigo do copilo e status (1 = ativo / 0 = inativo).
+- **typedef struct Assento**: Armazena as informações do assento incluindo: numero do assento, codigo do voo e status (1 = ocupado / 0 = livre).
+- **typedef struct Reserva**: Armazena as informaçoes da reserva incluindo: codigo do voo, numero do assento e codigo do passageiro.
+#Funções Ultilizadas
+
+
+
+# Menu 
+![Captura de tela 2024-12-13 141504](https://github.com/user-attachments/assets/0c17bdb7-f752-4d83-94e3-c4f5bc73ce54)
+
 
