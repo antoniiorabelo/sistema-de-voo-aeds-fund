@@ -155,8 +155,11 @@ Abaixo é possível acompanhar a organização das sprints feita apartir do back
 
 # Relatorio de testes
 Em anexo, temos tabelas que representam alguns dos relatórios de testes, neles é possível ver as entradas, classes válidas, classes inválidas e os resultados esperados.
+
 ![image](https://github.com/user-attachments/assets/e9738d07-5f38-4136-8e44-0dc9c5049262)
+
 ![image](https://github.com/user-attachments/assets/57182103-11d0-4c10-89a2-735276094eca)
+
 ![image](https://github.com/user-attachments/assets/6fdc2b4b-410b-44af-8229-2882adcae279)
 
 
