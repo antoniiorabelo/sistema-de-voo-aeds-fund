@@ -138,7 +138,7 @@ Mensagem de Erro para Nome Inválido:
 # Metodos Ágeis 
 Para a confecção de um ótimo trabalho pautado nas boas práticas da engenharia de software, utilizamos o Scrum e o Kanban
 
-- **Scrum:**O framework Scrum, nos auxiliou a organizar o projeto em sprints de aproximadamente 5 dias, onde efetuamos as suas cerimônias criteriosamente. Planejávamos a sprint e definíamos qual seria o backlog da mesma. Realizávamos ¨daily's com durações aproximadas de 5 a 8 minutos. Ao final de cada sprint, revisávamos o que tinha sido concluído e entregue ao cliente e, por fim, revisávamos a maneira como trabalhamos para buscar melhorias no processo.
+- **Scrum:** O framework Scrum, nos auxiliou a organizar o projeto em sprints de aproximadamente 5 dias, onde efetuamos as suas cerimônias criteriosamente. Planejávamos a sprint e definíamos qual seria o backlog da mesma. Realizávamos ¨daily's com durações aproximadas de 5 a 8 minutos. Ao final de cada sprint, revisávamos o que tinha sido concluído e entregue ao cliente e, por fim, revisávamos a maneira como trabalhamos para buscar melhorias no processo.
 - **Kanban:** Utilizamos a funçao do Git Hub para criar um projeto para fazer o acompanhamento visual do projeto através do framework Kanban onde organizamos os requisitos, o backlog do produto, backlog da sprint e separavámos as tarefas da sprint no quadro To-do, Doing, Done.
 # Evoluçao das Sprints
 Abaixo é possível acompanhar a organização das sprints feita apartir do backlog feito no Github.
