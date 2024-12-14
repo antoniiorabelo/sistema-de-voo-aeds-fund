@@ -163,8 +163,5 @@ Em anexo, temos tabelas que representam alguns dos relatórios de testes, neles 
 ![image](https://github.com/user-attachments/assets/6fdc2b4b-410b-44af-8229-2882adcae279)
 
 # Vídeo Apresentando o Projeto.
-<video width="600" controls>
-  <source src="https://github.com/antoniiorabelo/sistema-de-voo-aeds-fund/blob/main/video/execucao-codigo.mp4?raw=true" type="video/mp4">
-  Seu navegador não suporta o elemento de vídeo.
-</video>
+<a href="https://github.com/antoniiorabelo/sistema-de-voo-aeds-fund/blob/main/video/execucao-codigo.mp4?raw=true" target="_blank">Vídeo Aqui</a><br>
 
